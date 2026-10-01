@@ -98,12 +98,45 @@
 
     .slide.active {
       display: flex;
-      animation: slideIn var(--snap) ease-out;
     }
 
-    @keyframes slideIn {
-      from { opacity: 0.85; transform: translateY(6px); }
+    .slide.active.enter-fade {
+      animation: enterFade 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .slide.active.enter-up {
+      animation: enterUp 780ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .slide.active.enter-soft {
+      animation: enterSoft 900ms cubic-bezier(0.25, 0.1, 0.25, 1) both;
+    }
+    .slide.active.enter-firm {
+      animation: enterFirm 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes enterFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes enterUp {
+      from { opacity: 0; transform: translateY(18px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes enterSoft {
+      from { opacity: 0; transform: translateY(10px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes enterFirm {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .progress.latido .progress-seg.done .fill {
+      animation: latidoBar 520ms ease-out;
+    }
+    @keyframes latidoBar {
+      0% { filter: brightness(1); box-shadow: none; }
+      40% { filter: brightness(1.35); box-shadow: 0 0 10px rgba(200, 240, 0, 0.55); }
+      100% { filter: brightness(1); box-shadow: none; }
     }
 
     .slide-inner {
@@ -138,6 +171,27 @@
       background:
         radial-gradient(ellipse 90% 55% at 50% 0%, rgba(200, 240, 0, 0.16), transparent 55%),
         radial-gradient(ellipse 40% 30% at 100% 90%, rgba(255, 107, 44, 0.1), transparent 50%);
+      animation: glowBreathe 5.2s ease-in-out infinite;
+    }
+    @keyframes glowBreathe {
+      0%, 100% { opacity: 0.75; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(12px); }
+    .slide.active .reveal { animation: revealIn 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .slide.active .reveal-d1 { animation-delay: 80ms; }
+    .slide.active .reveal-d2 { animation-delay: 200ms; }
+    .slide.active .reveal-d3 { animation-delay: 320ms; }
+    .slide.active .reveal-d4 { animation-delay: 450ms; }
+    .slide.active .reveal-d5 { animation-delay: 580ms; }
+    @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
+
+    .slide.active .lima-block.anim-badge { animation: badgeOvershoot 700ms cubic-bezier(0.34, 1.45, 0.64, 1) both; }
+    @keyframes badgeOvershoot {
+      0% { opacity: 0; transform: scale(0.86); }
+      55% { opacity: 1; transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
     .slide.grain::after {
@@ -229,8 +283,16 @@
       background: var(--surface);
       border-radius: var(--radius);
       padding: 1rem 1.1rem;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: none;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
     }
+    .slide.active.when-slide .fact {
+      opacity: 0;
+      animation: revealIn 680ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .slide.active.when-slide .fact:nth-child(1) { animation-delay: 120ms; }
+    .slide.active.when-slide .fact:nth-child(2) { animation-delay: 260ms; }
+    .slide.active.when-slide .fact:nth-child(3) { animation-delay: 400ms; }
 
     .fact-label {
       font-size: 0.68rem;
@@ -317,7 +379,8 @@
       background: var(--surface);
       border-radius: var(--radius);
       padding: 1rem 1.1rem;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: none;
+      box-shadow: inset 0 0 0 1px rgba(200, 240, 0, 0.06);
     }
 
     .dist-card .label {
@@ -360,7 +423,15 @@
     }
 
     .odo.spinning .odo-reel {
-      transition: transform 3.4s cubic-bezier(0.35, 0.0, 0.15, 1);
+      transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .odo.landed {
+      animation: odoLandPulse 720ms ease-out;
+    }
+    @keyframes odoLandPulse {
+      0% { filter: brightness(1); text-shadow: none; }
+      35% { filter: brightness(1.25); text-shadow: 0 0 16px rgba(200, 240, 0, 0.55); }
+      100% { filter: brightness(1); text-shadow: none; }
     }
 
     .odo-val {
@@ -385,6 +456,17 @@
       border-radius: var(--radius);
       padding: 1rem 1.1rem;
       border: 1px solid rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    .slide.active .modality-item {
+      animation: modCascade 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .slide.active .modality-item:nth-child(1) { animation-delay: 100ms; }
+    .slide.active .modality-item:nth-child(2) { animation-delay: 250ms; }
+    .slide.active .modality-item:nth-child(3) { animation-delay: 400ms; }
+    @keyframes modCascade {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .modality-item strong {
@@ -575,6 +657,17 @@
       box-shadow: 0 4px 20px rgba(200, 240, 0, 0.22);
     }
 
+    .slide.active.form-slide .btn-lima.cta-enter {
+      animation: ctaScaleIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 280ms both;
+    }
+    .slide.active.form-slide .btn-whatsapp.cta-enter {
+      animation: ctaScaleIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 1000ms both;
+    }
+    @keyframes ctaScaleIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
     .btn-lima:active {
       background: var(--lima-deep);
     }
@@ -719,13 +812,59 @@
       position: absolute;
       left: 50%;
       top: 48%;
-      z-index: 2;
+      z-index: 3;
       width: 36px;
       height: 46px;
-      transform: translate(-50%, -100%);
+      transform: translate(-50%, -160%);
+      opacity: 0;
       pointer-events: none;
       filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
     }
+    .slide.active.place-slide .map-pin {
+      animation: pinDrop 700ms cubic-bezier(0.22, 1, 0.36, 1) 120ms forwards;
+    }
+    @keyframes pinDrop {
+      0% { opacity: 0; transform: translate(-50%, -220%); }
+      70% { opacity: 1; transform: translate(-50%, -96%); }
+      100% { opacity: 1; transform: translate(-50%, -100%); }
+    }
+    .pin-halo {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      width: 18px;
+      height: 18px;
+      margin: -9px 0 0 -9px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(200, 240, 0, 0.55);
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+    }
+    .slide.active.place-slide .pin-halo {
+      animation: haloRing 1.8s ease-out 720ms infinite;
+    }
+    .slide.active.place-slide .pin-halo.h2 { animation-delay: 1.15s; }
+    @keyframes haloRing {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(4.2); }
+    }
+    .loc-meta.anim-loc {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .slide.active.place-slide .loc-meta.anim-loc {
+      animation: revealIn 600ms cubic-bezier(0.22, 1, 0.36, 1) 780ms forwards;
+    }
+    .maps-actions .maps-btn {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    .stories.place-active .maps-actions .maps-btn {
+      animation: revealIn 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .stories.place-active .maps-actions .maps-btn:nth-child(1) { animation-delay: 900ms; }
+    .stories.place-active .maps-actions .maps-btn:nth-child(2) { animation-delay: 1020ms; }
 
     .map-pin .pin-body {
       width: 26px;
@@ -847,11 +986,11 @@
     <!-- 0 Intro -->
     <section class="slide hero-energy active" data-i="0">
       <div class="slide-inner">
-        <span class="badge-pill">Invitación especial</span>
-        <p class="kicker">Cartilla Gracia</p>
-        <h1>Te presentamos<br>Gracia Latidos<br>2026</h1>
-        <p class="lead">Una invitación personal para nadar, pedalear y correr juntos por un mismo propósito.</p>
-        <div class="pills" style="pointer-events:none">
+        <span class="badge-pill reveal reveal-d1">Invitación especial</span>
+        <p class="kicker reveal reveal-d2">Cartilla Gracia</p>
+        <h1 class="reveal reveal-d3">Te presentamos<br>Gracia Latidos<br>2026</h1>
+        <p class="lead reveal reveal-d4">Una invitación personal para nadar, pedalear y correr juntos por un mismo propósito.</p>
+        <div class="pills reveal reveal-d5" style="pointer-events:none">
           <span class="pill"><span class="dot"></span>Triatlón</span>
           <span class="pill energy"><span class="dot"></span>Intereclesial</span>
         </div>
@@ -860,10 +999,10 @@
     </section>
 
     <!-- 1 Edition -->
-    <section class="slide" data-i="1">
+    <section class="slide edition-slide" data-i="1">
       <div class="slide-inner">
         <p class="kicker">El evento</p>
-        <div class="lima-block">2ª edición</div>
+        <div class="lima-block anim-badge">2ª edición</div>
         <h2>Triatlón<br>intereclesial</h2>
         <p class="lead">Un encuentro de iglesias, cuerpo y comunidad. Nos encantaría contar contigo.</p>
       </div>
@@ -921,12 +1060,14 @@
               <circle cx="200" cy="145" r="22" fill="none" stroke="#C8F000" stroke-opacity="0.25" stroke-width="2"/>
               <circle cx="200" cy="145" r="8" fill="#C8F000" fill-opacity="0.35"/>
             </svg>
+            <div class="pin-halo" aria-hidden="true"></div>
+            <div class="pin-halo h2" aria-hidden="true"></div>
             <div class="map-pin" aria-hidden="true">
               <div class="pin-body"></div>
               <div class="pin-hole"></div>
             </div>
           </div>
-          <div class="loc-meta">
+          <div class="loc-meta anim-loc">
             <p class="fact-label">Ubicación</p>
             <p class="addr">ESMIL (Parcayacu)</p>
             <p class="addr-sub">Av. Manuel Córdova Galarza, vía Mitad del Mundo</p>
@@ -936,7 +1077,7 @@
     </section>
 
     <!-- 3 Date / fee / close -->
-    <section class="slide" data-i="3">
+    <section class="slide when-slide" data-i="3">
       <div class="slide-inner">
         <p class="kicker">Cuándo e inscripción</p>
         <div class="fact-stack">
@@ -1044,7 +1185,7 @@
               </select>
             </div>
             <p class="error-msg" id="form-error" role="alert">Por favor, completa nombre, apellido y disciplina.</p>
-            <button type="submit" class="btn btn-lima" id="submit-btn">Enviar preinscripción</button>
+            <button type="submit" class="btn btn-lima cta-enter" id="submit-btn">Enviar preinscripción</button>
           </form>
           <div class="form-success" id="form-success">
             <p>¡Listo, <strong id="success-name"></strong>!</p>
@@ -1054,7 +1195,7 @@
               Continuar
             </a>
           </div>
-          <a class="btn btn-whatsapp" id="wa-direct" href="#" target="_blank" rel="noopener noreferrer">
+          <a class="btn btn-whatsapp cta-enter" id="wa-direct" href="#" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             Comunicarme por WhatsApp
           </a>
@@ -1120,7 +1261,7 @@
           distHoldTimer = null;
         }
         odos.forEach(function (odo) {
-          odo.classList.remove("spinning");
+          odo.classList.remove("spinning", "landed");
           var reel = odo.querySelector(".odo-reel");
           reel.style.transition = "none";
           reel.style.transform = "translate3d(0,0,0)";
@@ -1131,7 +1272,10 @@
 
       function playDistRoulette() {
         resetDistRoulette();
-        /* Hold official triathlon distances, then reel down */
+        odos.forEach(function (odo) { odo.classList.remove("landed"); });
+        var HOLD = 320;
+        var STAGGER = 160;
+        var FALL = 1100;
         distHoldTimer = setTimeout(function () {
           distHoldTimer = null;
           odos.forEach(function (odo, idx) {
@@ -1140,26 +1284,55 @@
             var line = reel.querySelector(".odo-val");
             var lineH = line ? line.offsetHeight : reel.offsetHeight / steps.length;
             var target = -lineH * (steps.length - 1);
-            /* stagger slightly for mechanical feel */
             setTimeout(function () {
               odo.classList.add("spinning");
               reel.style.transform = "translate3d(0," + target + "px,0)";
-            }, idx * 160);
+              setTimeout(function () { odo.classList.add("landed"); }, FALL);
+            }, idx * STAGGER);
           });
-        }, 400);
+        }, HOLD);
+      }
+
+      var enterCycle = ["enter-soft", "enter-up", "enter-fade", "enter-firm"];
+      var enterIdx = 0;
+
+      function pulseProgress() {
+        progressEl.classList.remove("latido");
+        void progressEl.offsetWidth;
+        progressEl.classList.add("latido");
+        setTimeout(function () { progressEl.classList.remove("latido"); }, 560);
+      }
+
+      function applyEnterAnim(slide) {
+        slide.classList.remove("enter-fade", "enter-up", "enter-soft", "enter-firm");
+        var cls;
+        if (slide.classList.contains("hero-energy") || slide.classList.contains("when-slide") || slide.classList.contains("place-slide")) {
+          cls = "enter-soft";
+        } else if (slide.classList.contains("distances-slide")) {
+          cls = "enter-fade";
+        } else if (slide.classList.contains("form-slide")) {
+          cls = "enter-firm";
+        } else {
+          cls = enterCycle[enterIdx % enterCycle.length];
+          enterIdx++;
+        }
+        void slide.offsetWidth;
+        slide.classList.add(cls);
       }
 
       function goTo(i, fromUser) {
         if (i < 0 || i >= slides.length) return;
         var leaving = current;
-        slides[current].classList.remove("active");
+        slides[current].classList.remove("active", "enter-fade", "enter-up", "enter-soft", "enter-firm");
         current = i;
         slides[current].classList.add("active");
+        applyEnterAnim(slides[current]);
         root.classList.toggle("form-active", isForm(current));
         root.classList.toggle("place-active", slides[current].classList.contains("place-slide"));
         if (hint && fromUser) hint.classList.add("hidden");
         if (hint && current === 0 && !fromUser) hint.classList.remove("hidden");
         updateProgress();
+        if (leaving !== current) pulseProgress();
         if (isForm(current)) {
           slides[current].scrollTop = 0;
         }
