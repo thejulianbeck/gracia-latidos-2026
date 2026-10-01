@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
   <meta name="theme-color" content="#AA0508" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="description" content="Gracia Latidos 2026 — 2ª edición. Triatlón intereclesial. 14 de noviembre de 2026, Quito." />
   <title>Gracia Latidos 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,309 +21,333 @@
       --ink: #1a1210;
       --ink-muted: #5c5048;
       --white: #ffffff;
-      --radius: 16px;
+      --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --story-duration: 5s;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      scroll-behavior: smooth;
+    html, body {
+      height: 100%;
+      overflow: hidden;
       -webkit-text-size-adjust: 100%;
-    }
-
-    body {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      background: #1a0808;
       font-family: "DM Sans", "Inter", system-ui, -apple-system, sans-serif;
-      background: var(--cream);
-      color: var(--ink);
-      line-height: 1.45;
-      min-height: 100dvh;
-      overflow-x: hidden;
-    }
-
-    .app {
-      max-width: 390px;
-      margin: 0 auto;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      background: var(--cream);
-      position: relative;
-    }
-
-    /* Hero */
-    .hero {
-      background: linear-gradient(165deg, var(--red-deep) 0%, var(--red) 55%, #c41018 100%);
       color: var(--white);
-      padding: 2.25rem 1.5rem 2rem;
-      text-align: center;
-      position: relative;
+    }
+
+    .stories {
+      position: fixed;
+      inset: 0;
+      max-width: 430px;
+      margin: 0 auto;
+      height: 100%;
+      height: 100dvh;
+      background: var(--red-deep);
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Progress bars */
+    .progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      display: flex;
+      gap: 4px;
+      padding: calc(10px + var(--safe-top)) 10px 0;
+      pointer-events: none;
+    }
+
+    .progress-seg {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.28);
       overflow: hidden;
     }
 
-    .hero::before {
+    .progress-seg .fill {
+      height: 100%;
+      width: 0%;
+      background: var(--white);
+      border-radius: 2px;
+      transform-origin: left center;
+    }
+
+    .progress-seg.done .fill { width: 100%; }
+    .progress-seg.active .fill {
+      width: 0%;
+      animation: storyFill var(--story-duration) linear forwards;
+    }
+    .progress-seg.paused .fill { animation-play-state: paused; }
+
+    @keyframes storyFill {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+    /* Slides */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      padding: calc(36px + var(--safe-top)) 1.5rem calc(1.5rem + var(--safe-bottom));
+      background: linear-gradient(165deg, var(--red-deep) 0%, var(--red) 48%, #8f0406 100%);
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .slide.active { display: flex; }
+
+    .slide::before {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(190, 170, 133, 0.35), transparent 55%),
-        radial-gradient(circle at 90% 80%, rgba(0,0,0,0.15), transparent 40%);
+        radial-gradient(ellipse 90% 45% at 50% -5%, rgba(190, 170, 133, 0.32), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.25), transparent 45%);
       pointer-events: none;
     }
 
-    .hero-inner { position: relative; z-index: 1; }
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      pointer-events: none;
+    }
 
-    .badge {
+    .slide.form-slide .slide-inner {
+      justify-content: flex-start;
+      padding-top: 0.5rem;
+      pointer-events: auto;
+    }
+
+    .kicker {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.85rem;
+    }
+
+    .slide h1 {
+      font-family: "Inter", "DM Sans", system-ui, sans-serif;
+      font-size: clamp(1.75rem, 7vw, 2.15rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 0.85rem;
+    }
+
+    .slide h2 {
+      font-family: "Inter", "DM Sans", system-ui, sans-serif;
+      font-size: clamp(1.45rem, 6vw, 1.85rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      line-height: 1.45;
+      opacity: 0.93;
+      max-width: 18em;
+    }
+
+    .gold-line {
+      width: 44px;
+      height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin: 1.15rem 0 0;
+    }
+
+    .badge-pill {
       display: inline-block;
-      font-size: 0.7rem;
+      align-self: flex-start;
+      font-size: 0.68rem;
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--gold);
-      border: 1px solid rgba(190, 170, 133, 0.55);
-      padding: 0.35rem 0.75rem;
+      border: 1px solid rgba(190, 170, 133, 0.5);
+      padding: 0.35rem 0.7rem;
       border-radius: 999px;
       margin-bottom: 1rem;
-      background: rgba(0,0,0,0.12);
+      background: rgba(0, 0, 0, 0.15);
     }
 
-    .hero h1 {
-      font-family: "Inter", "DM Sans", system-ui, sans-serif;
-      font-size: 1.85rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin-bottom: 0.4rem;
+    .fact-stack { margin-top: 0.5rem; }
+
+    .fact {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .hero .edition {
-      font-size: 0.95rem;
-      color: var(--gold-soft);
-      font-weight: 500;
-      margin-bottom: 0.75rem;
-    }
+    .fact:last-child { border-bottom: none; }
 
-    .hero .tagline {
-      font-size: 0.95rem;
-      opacity: 0.92;
-      font-weight: 400;
-      max-width: 18em;
-      margin: 0 auto;
-    }
-
-    .gold-line {
-      width: 48px;
-      height: 3px;
-      background: var(--gold);
-      margin: 1.1rem auto 0;
-      border-radius: 2px;
-    }
-
-    /* Slides */
-    .slides-section {
-      padding: 1.25rem 1.25rem 0.5rem;
-    }
-
-    .slides-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--red-deep);
-      margin-bottom: 0.65rem;
-      padding-left: 0.15rem;
-    }
-
-    .slides-wrap {
-      position: relative;
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: var(--white);
-      box-shadow: 0 4px 24px rgba(170, 5, 8, 0.08), 0 1px 3px rgba(0,0,0,0.04);
-      min-height: 148px;
-    }
-
-    .slide {
-      position: absolute;
-      inset: 0;
-      padding: 1.35rem 1.25rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      opacity: 0;
-      transform: translateX(12px);
-      transition: opacity 0.45s ease, transform 0.45s ease;
-      pointer-events: none;
-    }
-
-    .slide.active {
-      opacity: 1;
-      transform: translateX(0);
-      pointer-events: auto;
-      position: relative;
-    }
-
-    .slide-icon {
-      font-size: 1.35rem;
-      margin-bottom: 0.4rem;
-      line-height: 1;
-    }
-
-    .slide-kicker {
+    .fact-label {
       font-size: 0.68rem;
       font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.2rem;
     }
 
-    .slide-title {
+    .fact-value {
       font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--ink);
+      font-weight: 600;
       letter-spacing: -0.01em;
-      margin-bottom: 0.3rem;
     }
 
-    .slide-body {
+    .fact-sub {
       font-size: 0.9rem;
-      color: var(--ink-muted);
-    }
-
-    .dots {
-      display: flex;
-      justify-content: center;
-      gap: 0.4rem;
-      padding: 0.85rem 0 0.25rem;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: rgba(170, 5, 8, 0.2);
-      border: none;
-      padding: 0;
-      cursor: pointer;
-      transition: background 0.25s, transform 0.25s;
-    }
-
-    .dot.active {
-      background: var(--red);
-      transform: scale(1.15);
-    }
-
-    /* Content cards */
-    .content {
-      padding: 1rem 1.25rem 1.5rem;
-      flex: 1;
-    }
-
-    .card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 1.2rem 1.15rem;
-      margin-bottom: 0.9rem;
-      box-shadow: 0 2px 12px rgba(170, 5, 8, 0.06);
-      border: 1px solid rgba(190, 170, 133, 0.25);
-    }
-
-    .card h2 {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--red-deep);
-      margin-bottom: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-    }
-
-    .card h2::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      opacity: 0.6;
-    }
-
-    .modality {
-      padding: 0.75rem 0;
-      border-bottom: 1px solid rgba(190, 170, 133, 0.3);
-    }
-
-    .modality:last-child { border-bottom: none; padding-bottom: 0; }
-    .modality:first-of-type { padding-top: 0; }
-
-    .modality-name {
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--ink);
-      margin-bottom: 0.25rem;
-    }
-
-    .modality-detail {
-      font-size: 0.85rem;
-      color: var(--ink-muted);
-    }
-
-    .prizes-list {
-      list-style: none;
-      font-size: 0.9rem;
-      color: var(--ink-muted);
-    }
-
-    .prizes-list li {
-      padding: 0.35rem 0;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .prizes-list li::before {
-      content: "★";
-      color: var(--gold);
-      font-size: 0.75rem;
+      opacity: 0.85;
       margin-top: 0.15rem;
     }
 
-    .invite-note {
+    .modality-list { margin-top: 0.35rem; }
+
+    .modality-item {
+      padding: 0.7rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .modality-item:last-child { border-bottom: none; }
+
+    .modality-item strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .modality-item span {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    .prize-list {
+      list-style: none;
+      margin-top: 0.5rem;
+    }
+
+    .prize-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+      padding: 0.55rem 0;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    .prize-list li::before {
+      content: "★";
+      color: var(--gold);
+      font-size: 0.85rem;
+      margin-top: 0.15rem;
+    }
+
+    .hint-tap {
+      position: absolute;
+      bottom: calc(1.25rem + var(--safe-bottom));
+      left: 0;
+      right: 0;
+      z-index: 5;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+
+    .hint-tap.hidden { opacity: 0; }
+
+    /* Tap zones (stories navigation) — above content except form */
+    .tap-zones {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      padding-top: calc(28px + var(--safe-top));
+    }
+
+    .tap-left, .tap-right {
+      height: 100%;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .tap-left { width: 30%; }
+    .tap-right { width: 70%; }
+
+    .stories.form-active .tap-zones {
+      display: none;
+    }
+
+    /* Form slide */
+    .form-card {
+      background: var(--cream);
+      color: var(--ink);
+      border-radius: 18px;
+      padding: 1.2rem 1.1rem 1.15rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      margin-top: 0.35rem;
+      pointer-events: auto;
+    }
+
+    .form-card h2 {
+      color: var(--red-deep);
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .form-intro {
       font-size: 0.88rem;
       color: var(--ink-muted);
-      font-style: italic;
-      text-align: center;
-      padding: 0.25rem 0.5rem 1rem;
+      margin-bottom: 1rem;
     }
 
-    /* Form */
-    .form-card h2 { margin-bottom: 1rem; }
-
-    .field {
-      margin-bottom: 0.9rem;
-    }
+    .field { margin-bottom: 0.8rem; }
 
     .field label {
       display: block;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 600;
       color: var(--ink);
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.3rem;
     }
 
-    .field input[type="text"],
+    .field input,
     .field select {
       width: 100%;
-      padding: 0.75rem 0.85rem;
+      padding: 0.72rem 0.8rem;
       font-size: 1rem;
       font-family: inherit;
-      border: 1.5px solid rgba(190, 170, 133, 0.55);
+      border: 1.5px solid rgba(190, 170, 133, 0.6);
       border-radius: 12px;
-      background: var(--cream);
+      background: #fff;
       color: var(--ink);
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
       -webkit-appearance: none;
       appearance: none;
     }
@@ -330,8 +355,8 @@
     .field select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23AA0508' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 0.9rem center;
-      padding-right: 2.2rem;
+      background-position: right 0.85rem center;
+      padding-right: 2.1rem;
     }
 
     .field input:focus,
@@ -340,32 +365,22 @@
       box-shadow: 0 0 0 3px rgba(229, 30, 35, 0.15);
     }
 
-    .check-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.65rem;
-      margin: 1rem 0 1.15rem;
-      cursor: pointer;
+    .error-msg {
+      display: none;
+      font-size: 0.8rem;
+      color: var(--red-deep);
+      margin-bottom: 0.65rem;
     }
 
-    .check-row input {
-      width: 1.15rem;
-      height: 1.15rem;
-      margin-top: 0.1rem;
-      accent-color: var(--red-deep);
-      flex-shrink: 0;
-    }
-
-    .check-row span {
-      font-size: 0.88rem;
-      color: var(--ink-muted);
-      line-height: 1.4;
-    }
+    .error-msg.visible { display: block; }
 
     .btn {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
       width: 100%;
-      padding: 0.95rem 1.25rem;
+      padding: 0.9rem 1.1rem;
       font-family: inherit;
       font-size: 1rem;
       font-weight: 700;
@@ -374,8 +389,7 @@
       border: none;
       border-radius: 14px;
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.12s, opacity 0.15s;
     }
 
     .btn:active { transform: scale(0.98); }
@@ -383,280 +397,441 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--red) 0%, var(--red-deep) 100%);
       color: var(--white);
-      box-shadow: 0 4px 16px rgba(170, 5, 8, 0.35);
+      box-shadow: 0 4px 14px rgba(170, 5, 8, 0.35);
     }
 
     .btn-whatsapp {
       background: #25D366;
-      color: var(--white);
-      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
-
-    .btn-whatsapp.visible {
-      display: flex;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+      margin-top: 0.65rem;
     }
 
     .btn-whatsapp svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       fill: currentColor;
+      flex-shrink: 0;
     }
+
+    .btn-whatsapp.hidden { display: none; }
 
     .form-success {
       display: none;
       text-align: center;
-      padding: 0.5rem 0 0.25rem;
-      animation: fadeUp 0.4s ease;
+      padding: 0.35rem 0 0;
     }
 
     .form-success.visible { display: block; }
 
     .form-success p {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--ink-muted);
       margin-bottom: 0.15rem;
     }
 
-    .form-success strong {
-      color: var(--red-deep);
-    }
+    .form-success strong { color: var(--red-deep); }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .error-msg {
-      display: none;
-      font-size: 0.8rem;
-      color: var(--red-deep);
-      margin-top: -0.5rem;
+    .form-header-meta {
       margin-bottom: 0.75rem;
     }
 
-    .error-msg.visible { display: block; }
-
-    /* Footer */
-    .footer {
-      text-align: center;
-      padding: 0.75rem 1.5rem calc(1.25rem + var(--safe-bottom));
-      font-size: 0.75rem;
-      color: var(--ink-muted);
+    .form-header-meta .kicker {
+      margin-bottom: 0.4rem;
     }
 
-    .footer .brand {
-      color: var(--red-deep);
-      font-weight: 600;
+    .form-header-meta .lead-sm {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      line-height: 1.4;
     }
 
-    .wa-direct {
-      padding: 0 1.25rem 1rem;
+    .nav-back {
+      position: absolute;
+      top: calc(28px + var(--safe-top));
+      left: 10px;
+      z-index: 35;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.25);
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
     }
 
-    .wa-direct .btn-whatsapp {
-      display: flex;
-    }
+    .stories.form-active .nav-back { display: flex; }
 
-    .wa-direct .hint {
-      font-size: 0.78rem;
-      color: var(--ink-muted);
-      text-align: center;
-      margin-top: 0.55rem;
+    .wa-icon-path {
+      /* placeholder for reuse */
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <header class="hero">
-      <div class="hero-inner">
-        <div class="badge">Invitación especial</div>
-        <h1>Gracia Latidos 2026</h1>
-        <p class="edition">2ª edición · Triatlón intereclesial</p>
-        <p class="tagline">Te invitamos a correr, pedalear y nadar juntos por un mismo propósito.</p>
-        <div class="gold-line"></div>
-      </div>
-    </header>
+  <div class="stories" id="stories" role="application" aria-label="Historias Gracia Latidos 2026">
+    <div class="progress" id="progress" aria-hidden="true"></div>
 
-    <section class="slides-section" aria-label="Datos clave">
-      <p class="slides-label">Lo esencial</p>
-      <div class="slides-wrap" id="slides">
-        <article class="slide active" data-slide="0">
-          <div class="slide-icon" aria-hidden="true">📅</div>
-          <p class="slide-kicker">Fecha</p>
-          <h3 class="slide-title">14 de noviembre de 2026</h3>
-          <p class="slide-body">Marca tu calendario. Será un día para la gloria y el deporte.</p>
-        </article>
-        <article class="slide" data-slide="1">
-          <div class="slide-icon" aria-hidden="true">📍</div>
-          <p class="slide-kicker">Lugar</p>
-          <h3 class="slide-title">Escuela Militar Esmil</h3>
-          <p class="slide-body">Parcayacu, Quito, Ecuador</p>
-        </article>
-        <article class="slide" data-slide="2">
-          <div class="slide-icon" aria-hidden="true">🏊</div>
-          <p class="slide-kicker">Distancias</p>
-          <h3 class="slide-title">250 m · 10 km · 5 km</h3>
-          <p class="slide-body">Natación, ciclismo y carrera — mismas distancias en masculino y femenino.</p>
-        </article>
-        <article class="slide" data-slide="3">
-          <div class="slide-icon" aria-hidden="true">💵</div>
-          <p class="slide-kicker">Inscripción</p>
-          <h3 class="slide-title">30 dólares</h3>
-          <p class="slide-body">El pago se coordina por WhatsApp (transferencia).</p>
-        </article>
-        <article class="slide" data-slide="4">
-          <div class="slide-icon" aria-hidden="true">⏰</div>
-          <p class="slide-kicker">Cierre</p>
-          <h3 class="slide-title">18 de octubre de 2026</h3>
-          <p class="slide-body">Último día para preinscribirte. ¡No lo dejes para después!</p>
-        </article>
-      </div>
-      <div class="dots" id="dots" role="tablist" aria-label="Navegar diapositivas"></div>
-    </section>
+    <button type="button" class="nav-back" id="nav-back" aria-label="Historia anterior">‹</button>
 
-    <main class="content">
-      <p class="invite-note">Esta invitación es personal. Nos encantaría contar contigo.</p>
-
-      <section class="card">
-        <h2>Modalidades</h2>
-        <div class="modality">
-          <p class="modality-name">1. Triatlón masculino</p>
-          <p class="modality-detail">250 m natación · 10 km ciclismo · 5 km carrera</p>
-        </div>
-        <div class="modality">
-          <p class="modality-name">2. Triatlón femenino</p>
-          <p class="modality-detail">Mismas distancias</p>
-        </div>
-        <div class="modality">
-          <p class="modality-name">3. Relevo</p>
-          <p class="modality-detail">Categoría mixta única. Equipos de 2 o 3 personas; cada uno elige su tramo.</p>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Premios</h2>
-        <ul class="prizes-list">
-          <li>1.º, 2.º y 3.º lugar en triatlón masculino</li>
-          <li>1.º, 2.º y 3.º lugar en triatlón femenino</li>
-          <li>1.º, 2.º y 3.º lugar en relevo</li>
-        </ul>
-      </section>
-
-      <section class="card form-card" id="preinscripcion">
-        <h2>Preinscripción</h2>
-        <form id="invite-form" novalidate>
-          <div class="field">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" autocomplete="given-name" required placeholder="Tu nombre" />
-          </div>
-          <div class="field">
-            <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" name="apellido" autocomplete="family-name" required placeholder="Tu apellido" />
-          </div>
-          <div class="field">
-            <label for="disciplina">Disciplina</label>
-            <select id="disciplina" name="disciplina" required>
-              <option value="" disabled selected>Elige una opción</option>
-              <option value="Triatlón masculino">Triatlón masculino</option>
-              <option value="Triatlón femenino">Triatlón femenino</option>
-              <option value="Relevo">Relevo</option>
-            </select>
-          </div>
-          <label class="check-row">
-            <input type="checkbox" id="relevos" name="relevos" />
-            <span>Estoy interesado en participar con alguien en equipo (relevos)</span>
-          </label>
-          <p class="error-msg" id="form-error" role="alert">Por favor, completa nombre, apellido y disciplina.</p>
-          <button type="submit" class="btn btn-primary" id="submit-btn">Enviar preinscripción</button>
-        </form>
-
-        <div class="form-success" id="form-success">
-          <p>¡Listo, <strong id="success-name"></strong>!</p>
-          <p>Continúa por WhatsApp para el siguiente paso.</p>
-          <a class="btn btn-whatsapp" id="wa-continuar" href="#" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Continuar
-          </a>
-        </div>
-      </section>
-    </main>
-
-    <div class="wa-direct">
-      <a class="btn btn-whatsapp" id="wa-direct" href="#" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Comunicarme por WhatsApp
-      </a>
-      <p class="hint">O completa la preinscripción arriba para un mensaje con tus datos.</p>
+    <div class="tap-zones" id="tap-zones">
+      <button type="button" class="tap-left" id="tap-left" aria-label="Anterior"></button>
+      <button type="button" class="tap-right" id="tap-right" aria-label="Siguiente"></button>
     </div>
 
-    <footer class="footer">
-      <p><span class="brand">Gracia Latidos 2026</span> · Cartilla Gracia</p>
-    </footer>
+    <!-- 0 -->
+    <section class="slide active" data-i="0">
+      <div class="slide-inner">
+        <span class="badge-pill">Invitación especial</span>
+        <p class="kicker">Cartilla Gracia</p>
+        <h1>Te presentamos<br>Gracia Latidos 2026</h1>
+        <p class="lead">Una invitación personal para correr, pedalear y nadar juntos por un mismo propósito.</p>
+        <div class="gold-line"></div>
+      </div>
+      <p class="hint-tap" id="hint-tap">Toca para continuar</p>
+    </section>
+
+    <!-- 1 -->
+    <section class="slide" data-i="1">
+      <div class="slide-inner">
+        <p class="kicker">El evento</p>
+        <h2>Segunda edición</h2>
+        <p class="lead">Triatlón intereclesial. Un encuentro de iglesias, cuerpo y comunidad.</p>
+        <div class="gold-line"></div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide" data-i="2">
+      <div class="slide-inner">
+        <p class="kicker">Lugar</p>
+        <h2>Escuela Militar Esmil</h2>
+        <p class="lead">Parcayacu, Quito, Ecuador</p>
+        <div class="gold-line"></div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide" data-i="3">
+      <div class="slide-inner">
+        <p class="kicker">Fecha e inscripción</p>
+        <div class="fact-stack">
+          <div class="fact">
+            <p class="fact-label">Fecha del evento</p>
+            <p class="fact-value">14 de noviembre de 2026</p>
+          </div>
+          <div class="fact">
+            <p class="fact-label">Cierre de inscripciones</p>
+            <p class="fact-value">18 de octubre de 2026</p>
+          </div>
+          <div class="fact">
+            <p class="fact-label">Costo</p>
+            <p class="fact-value">30 dólares</p>
+            <p class="fact-sub">El pago se coordina por WhatsApp (transferencia).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" data-i="4">
+      <div class="slide-inner">
+        <p class="kicker">Distancias</p>
+        <div class="fact-stack">
+          <div class="fact">
+            <p class="fact-label">Natación</p>
+            <p class="fact-value">250 m</p>
+          </div>
+          <div class="fact">
+            <p class="fact-label">Ciclismo</p>
+            <p class="fact-value">10 km</p>
+          </div>
+          <div class="fact">
+            <p class="fact-label">Carrera</p>
+            <p class="fact-value">5 km</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" data-i="5">
+      <div class="slide-inner">
+        <p class="kicker">Modalidades</p>
+        <div class="modality-list">
+          <div class="modality-item">
+            <strong>Triatlón masculino</strong>
+            <span>250 m · 10 km · 5 km</span>
+          </div>
+          <div class="modality-item">
+            <strong>Triatlón femenino</strong>
+            <span>Mismas distancias</span>
+          </div>
+          <div class="modality-item">
+            <strong>Relevo mixto</strong>
+            <span>Equipos de 2 o 3; cada uno elige su tramo</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" data-i="6">
+      <div class="slide-inner">
+        <p class="kicker">Premios</p>
+        <h2>1.º · 2.º · 3.º</h2>
+        <ul class="prize-list">
+          <li>Triatlón masculino</li>
+          <li>Triatlón femenino</li>
+          <li>Relevo</li>
+        </ul>
+        <p class="lead" style="margin-top:1rem;font-size:0.95rem;">En cada modalidad.</p>
+      </div>
+    </section>
+
+    <!-- 7 — form -->
+    <section class="slide form-slide" data-i="7" id="form-slide">
+      <div class="slide-inner">
+        <div class="form-header-meta">
+          <p class="kicker">Último paso</p>
+          <p class="lead-sm">Preinscríbete y continúa por WhatsApp. Nos encantará acompañarte.</p>
+        </div>
+        <div class="form-card">
+          <h2>Preinscripción</h2>
+          <p class="form-intro">Completa tus datos. El pago se coordina en el chat.</p>
+          <form id="invite-form" novalidate>
+            <div class="field">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" autocomplete="given-name" required placeholder="Tu nombre" />
+            </div>
+            <div class="field">
+              <label for="apellido">Apellido</label>
+              <input type="text" id="apellido" name="apellido" autocomplete="family-name" required placeholder="Tu apellido" />
+            </div>
+            <div class="field">
+              <label for="disciplina">Disciplina</label>
+              <select id="disciplina" name="disciplina" required>
+                <option value="" disabled selected>Elige una opción</option>
+                <option value="Triatlón masculino">Triatlón masculino</option>
+                <option value="Triatlón femenino">Triatlón femenino</option>
+                <option value="Relevo">Relevo</option>
+              </select>
+            </div>
+            <p class="error-msg" id="form-error" role="alert">Por favor, completa nombre, apellido y disciplina.</p>
+            <button type="submit" class="btn btn-primary" id="submit-btn">Enviar preinscripción</button>
+          </form>
+          <div class="form-success" id="form-success">
+            <p>¡Listo, <strong id="success-name"></strong>!</p>
+            <p>Continúa por WhatsApp para el siguiente paso.</p>
+            <a class="btn btn-whatsapp hidden" id="wa-continuar" href="#" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Continuar
+            </a>
+          </div>
+          <a class="btn btn-whatsapp" id="wa-direct" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Comunicarme por WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script>
     (function () {
       var WA_BASE = "https://wa.me/593963510138?text=";
-      var PHRASE = "Hola, quiero inscribirme, ¿cuál es el siguiente paso?";
+      var PHRASE = "Hola, estoy interesado en el triatlón Gracia Latidos. ¿Cuál es el siguiente paso?";
+      var DURATION = 5000;
 
-      /* --- Slides autoplay --- */
+      var root = document.getElementById("stories");
       var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
-      var dotsEl = document.getElementById("dots");
+      var progressEl = document.getElementById("progress");
+      var hint = document.getElementById("hint-tap");
       var current = 0;
-      var timer;
+      var timer = null;
+      var paused = false;
+      var touchStartX = 0;
+      var touchStartY = 0;
+      var touchStartT = 0;
+      var holding = false;
 
-      slides.forEach(function (_, i) {
-        var btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "dot" + (i === 0 ? " active" : "");
-        btn.setAttribute("aria-label", "Diapositiva " + (i + 1));
-        btn.addEventListener("click", function () { goTo(i); restart(); });
-        dotsEl.appendChild(btn);
+      /* Build progress segments */
+      slides.forEach(function () {
+        var seg = document.createElement("div");
+        seg.className = "progress-seg";
+        seg.innerHTML = '<div class="fill"></div>';
+        progressEl.appendChild(seg);
       });
+      var segs = Array.prototype.slice.call(progressEl.querySelectorAll(".progress-seg"));
 
-      var dots = Array.prototype.slice.call(dotsEl.querySelectorAll(".dot"));
+      function isForm(i) {
+        return slides[i].classList.contains("form-slide");
+      }
 
-      function goTo(i) {
+      function clearTimer() {
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+      }
+
+      function updateProgress(resetActive) {
+        segs.forEach(function (seg, i) {
+          seg.classList.remove("done", "active", "paused");
+          var fill = seg.querySelector(".fill");
+          fill.style.animation = "none";
+          /* force reflow */
+          void fill.offsetWidth;
+          fill.style.animation = "";
+          if (i < current) {
+            seg.classList.add("done");
+          } else if (i === current && !isForm(current)) {
+            seg.classList.add("active");
+            if (paused) seg.classList.add("paused");
+          } else if (i === current && isForm(current)) {
+            /* form: show full bar as "current done-ish" */
+            seg.classList.add("done");
+          }
+        });
+      }
+
+      function goTo(i, fromUser) {
+        if (i < 0 || i >= slides.length) return;
+        clearTimer();
         slides[current].classList.remove("active");
-        dots[current].classList.remove("active");
         current = i;
         slides[current].classList.add("active");
-        dots[current].classList.add("active");
+        root.classList.toggle("form-active", isForm(current));
+        if (hint && fromUser) hint.classList.add("hidden");
+        if (hint && current === 0 && !fromUser) hint.classList.remove("hidden");
+        updateProgress(true);
+        if (!isForm(current) && !paused) {
+          timer = setTimeout(function () { next(false); }, DURATION);
+        }
+        /* scroll form to top when entering */
+        if (isForm(current)) {
+          slides[current].scrollTop = 0;
+        }
       }
 
-      function next() {
-        goTo((current + 1) % slides.length);
+      function next(fromUser) {
+        if (current >= slides.length - 1) return;
+        goTo(current + 1, fromUser);
       }
 
-      function restart() {
-        clearInterval(timer);
-        timer = setInterval(next, 3800);
+      function prev(fromUser) {
+        if (current <= 0) return;
+        goTo(current - 1, fromUser);
       }
 
-      restart();
+      function pause() {
+        if (isForm(current) || paused) return;
+        paused = true;
+        clearTimer();
+        var active = segs[current];
+        if (active) active.classList.add("paused");
+      }
 
-      /* Pause when tab hidden */
-      document.addEventListener("visibilitychange", function () {
-        if (document.hidden) clearInterval(timer);
-        else restart();
+      function resume() {
+        if (isForm(current) || !paused) return;
+        paused = false;
+        /* restart remaining roughly as full duration — simple V2 */
+        updateProgress(true);
+        timer = setTimeout(function () { next(false); }, DURATION);
+      }
+
+      document.getElementById("tap-left").addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        prev(true);
       });
 
-      /* --- WhatsApp helpers --- */
-      function buildMessage(nombre, apellido, disciplina, relevos) {
+      document.getElementById("tap-right").addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        next(true);
+      });
+
+      document.getElementById("nav-back").addEventListener("click", function (e) {
+        e.preventDefault();
+        prev(true);
+      });
+
+      /* Swipe + hold-to-pause */
+      root.addEventListener("touchstart", function (e) {
+        if (isForm(current) && e.target.closest(".form-card")) return;
+        var t = e.changedTouches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        touchStartT = Date.now();
+        holding = true;
+        setTimeout(function () {
+          if (holding) pause();
+        }, 200);
+      }, { passive: true });
+
+      root.addEventListener("touchend", function (e) {
+        if (isForm(current) && e.target.closest(".form-card")) {
+          holding = false;
+          return;
+        }
+        var wasHolding = holding;
+        holding = false;
+        var t = e.changedTouches[0];
+        var dx = t.clientX - touchStartX;
+        var dy = t.clientY - touchStartY;
+        var dt = Date.now() - touchStartT;
+
+        if (paused) resume();
+
+        /* swipe horizontal */
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+          if (dx < 0) next(true);
+          else prev(true);
+          return;
+        }
+
+        /* short tap (not handled by tap zones if form) — zones handle most taps */
+        if (!wasHolding) return;
+      }, { passive: true });
+
+      root.addEventListener("touchcancel", function () {
+        holding = false;
+        if (paused) resume();
+      }, { passive: true });
+
+      /* Keyboard for desktop testing */
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          next(true);
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prev(true);
+        }
+      });
+
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+          pause();
+        } else if (!isForm(current)) {
+          resume();
+        }
+      });
+
+      /* WhatsApp */
+      function buildMessage(nombre, apellido, disciplina) {
         var parts = [PHRASE];
         if (nombre || apellido) {
           parts.push("\n\nNombre: " + (nombre || "").trim() + " " + (apellido || "").trim());
         }
         if (disciplina) {
           parts.push("\nDisciplina: " + disciplina);
-        }
-        if (relevos) {
-          parts.push("\nInterés en participar con alguien en equipo (relevos): sí");
         }
         return parts.join("");
       }
@@ -665,11 +840,8 @@
         return WA_BASE + encodeURIComponent(msg);
       }
 
-      /* Direct CTA without form */
-      var waDirect = document.getElementById("wa-direct");
-      waDirect.href = waUrl(PHRASE);
+      document.getElementById("wa-direct").href = waUrl(PHRASE);
 
-      /* Form */
       var form = document.getElementById("invite-form");
       var errEl = document.getElementById("form-error");
       var successEl = document.getElementById("form-success");
@@ -681,7 +853,6 @@
         var nombre = document.getElementById("nombre").value.trim();
         var apellido = document.getElementById("apellido").value.trim();
         var disciplina = document.getElementById("disciplina").value;
-        var relevos = document.getElementById("relevos").checked;
 
         if (!nombre || !apellido || !disciplina) {
           errEl.classList.add("visible");
@@ -689,20 +860,22 @@
         }
         errEl.classList.remove("visible");
 
-        var msg = buildMessage(nombre, apellido, disciplina, relevos);
-        waContinuar.href = waUrl(msg);
+        waContinuar.href = waUrl(buildMessage(nombre, apellido, disciplina));
         document.getElementById("success-name").textContent = nombre;
         successEl.classList.add("visible");
-        waContinuar.classList.add("visible");
+        waContinuar.classList.remove("hidden");
         submitBtn.style.display = "none";
+        document.getElementById("wa-direct").style.display = "none";
 
-        /* Soft-disable form fields but keep values visible */
         Array.prototype.forEach.call(form.querySelectorAll("input, select"), function (el) {
           el.disabled = true;
         });
 
         successEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
       });
+
+      /* Start */
+      goTo(0, false);
     })();
   </script>
 </body>
