@@ -130,6 +130,15 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Edition slide only — pre-roulette whole-slide enter (394e920) */
+    .slide.active.enter-slideIn {
+      animation: slideIn var(--snap) ease-out both;
+    }
+    @keyframes slideIn {
+      from { opacity: 0.85; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .progress.latido .progress-seg.done .fill {
       animation: latidoBar 520ms ease-out;
     }
@@ -219,12 +228,6 @@
     .slide.active .reveal-d4 { animation-delay: 450ms; }
     .slide.active .reveal-d5 { animation-delay: 580ms; }
     @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
-
-    .slide.active .lima-block.anim-badge { animation: badgeRise 700ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-    @keyframes badgeRise {
-      0% { opacity: 0; transform: translateY(12px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
 
     .slide.grain::after {
       content: "";
@@ -1034,7 +1037,7 @@
     <section class="slide edition-slide" data-i="1">
       <div class="slide-inner">
         <p class="kicker">El evento</p>
-        <div class="lima-block anim-badge">2ª edición</div>
+        <div class="lima-block">2ª edición</div>
         <h2>Triatlón<br>intereclesial</h2>
         <p class="lead">Un encuentro de iglesias, cuerpo y comunidad. Nos encantaría contar contigo.</p>
       </div>
@@ -1341,9 +1344,11 @@
       }
 
       function applyEnterAnim(slide) {
-        slide.classList.remove("enter-fade", "enter-up", "enter-soft", "enter-firm");
+        slide.classList.remove("enter-fade", "enter-up", "enter-soft", "enter-firm", "enter-slideIn");
         var cls;
-        if (slide.classList.contains("hero-energy") || slide.classList.contains("when-slide") || slide.classList.contains("place-slide")) {
+        if (slide.classList.contains("edition-slide")) {
+          cls = "enter-slideIn";
+        } else if (slide.classList.contains("hero-energy") || slide.classList.contains("when-slide") || slide.classList.contains("place-slide")) {
           cls = "enter-soft";
         } else if (slide.classList.contains("distances-slide")) {
           cls = "enter-fade";
@@ -1360,7 +1365,7 @@
       function goTo(i, fromUser) {
         if (i < 0 || i >= slides.length) return;
         var leaving = current;
-        slides[current].classList.remove("active", "enter-fade", "enter-up", "enter-soft", "enter-firm");
+        slides[current].classList.remove("active", "enter-fade", "enter-up", "enter-soft", "enter-firm", "enter-slideIn");
         current = i;
         slides[current].classList.add("active");
         applyEnterAnim(slides[current]);
