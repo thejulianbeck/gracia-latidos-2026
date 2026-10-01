@@ -309,6 +309,94 @@
       margin: 0.35rem 0 1rem;
     }
 
+
+    /* Edition Mood Spec — full-bleed B/N hero + 3-thumb strip */
+    .slide.edition-slide {
+      padding-bottom: calc(1.15rem + 86px + var(--safe-bottom));
+      overflow: hidden;
+    }
+    .slide.edition-slide::before {
+      opacity: 0.35;
+      background:
+        radial-gradient(ellipse 70% 40% at 20% 10%, rgba(200, 240, 0, 0.06), transparent 50%);
+    }
+    .edition-hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .edition-hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center right;
+      filter: grayscale(1);
+      opacity: 0;
+      transform: scale(1.04);
+      will-change: transform, opacity;
+    }
+    .slide.active.edition-slide .edition-hero-bg img {
+      animation: editionHeroIn 460ms ease-out forwards;
+    }
+    @keyframes editionHeroIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+    .edition-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(15, 17, 16, 0.42) 0%,
+        rgba(15, 17, 16, 0.62) 38%,
+        rgba(15, 17, 16, 0.88) 72%,
+        #0F1110 100%
+      );
+      pointer-events: none;
+    }
+    .slide.edition-slide .slide-inner {
+      position: relative;
+      z-index: 1;
+      justify-content: flex-end;
+      padding-bottom: 0.35rem;
+    }
+    .slide.edition-slide .lead {
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 22rem;
+    }
+    .edition-strip {
+      position: absolute;
+      left: 1.15rem;
+      right: 1.15rem;
+      bottom: calc(0.95rem + var(--safe-bottom));
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 7px;
+      height: 80px;
+      pointer-events: none;
+    }
+    .edition-thumb {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 13px;
+      opacity: 0;
+      transform: translateY(10px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
+    .slide.active.edition-slide .edition-thumb {
+      animation: editionThumbIn 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .slide.active.edition-slide .edition-thumb:nth-child(1) { animation-delay: 140ms; }
+    .slide.active.edition-slide .edition-thumb:nth-child(2) { animation-delay: 230ms; }
+    .slide.active.edition-slide .edition-thumb:nth-child(3) { animation-delay: 320ms; }
+    @keyframes editionThumbIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .card {
       background: var(--surface);
       border-radius: var(--radius);
@@ -1041,13 +1129,22 @@
       <p class="hint-tap" id="hint-tap">Toca para continuar</p>
     </section>
 
-    <!-- 1 Edition -->
+    <!-- 1 Edition — Mood Spec photo layout -->
     <section class="slide edition-slide" data-i="1">
+      <div class="edition-hero-bg" aria-hidden="true">
+        <img src="assets/edition-hero.jpg" alt="" width="1200" height="1600" decoding="async" />
+        <div class="edition-scrim"></div>
+      </div>
       <div class="slide-inner">
         <p class="kicker reveal reveal-d1">El evento</p>
         <div class="lima-block reveal reveal-d2">2ª edición</div>
         <h2 class="reveal reveal-d3">Triatlón<br>intereclesial</h2>
         <p class="lead reveal reveal-d4">Un encuentro de iglesias, cuerpo y comunidad. Nos encantaría contar contigo.</p>
+      </div>
+      <div class="edition-strip" aria-label="Momentos Gracia Latidos">
+        <img class="edition-thumb" src="assets/edition-swim.jpg" alt="Natación" width="480" height="320" decoding="async" />
+        <img class="edition-thumb" src="assets/edition-arch.jpg" alt="Arco de meta" width="480" height="320" decoding="async" />
+        <img class="edition-thumb" src="assets/edition-community.jpg" alt="Comunidad" width="480" height="320" decoding="async" />
       </div>
     </section>
 
