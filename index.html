@@ -3,27 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
-  <meta name="theme-color" content="#AA0508" />
+  <meta name="theme-color" content="#0F1110" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="description" content="Gracia Latidos 2026 — 2ª edición. Triatlón intereclesial. 14 de noviembre de 2026, Quito." />
   <title>Gracia Latidos 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --red: #E51E23;
-      --red-deep: #AA0508;
-      --gold: #BEAA85;
-      --gold-soft: #d4c4a8;
-      --cream: #faf7f2;
-      --ink: #1a1210;
-      --ink-muted: #5c5048;
-      --white: #ffffff;
+      --bg: #0F1110;
+      --surface: #1A1D1B;
+      --surface-2: #222624;
+      --text: #FFFFFF;
+      --muted: #8B918C;
+      --lima: #C8F000;
+      --lima-deep: #B6F500;
+      --energy: #FF6B2C;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --story-duration: 5s;
+      --radius: 24px;
+      --snap: 200ms;
+      --font: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,9 +37,10 @@
       -webkit-text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
-      background: #1a0808;
-      font-family: "DM Sans", "Inter", system-ui, -apple-system, sans-serif;
-      color: var(--white);
+      background: var(--bg);
+      font-family: var(--font);
+      font-weight: 400;
+      color: var(--text);
     }
 
     .stories {
@@ -46,22 +50,20 @@
       margin: 0 auto;
       height: 100%;
       height: 100dvh;
-      background: var(--red-deep);
+      background: var(--bg);
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
     }
 
-    /* Progress bars */
+    /* Progress */
     .progress {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 40;
       display: flex;
       gap: 4px;
-      padding: calc(10px + var(--safe-top)) 10px 0;
+      padding: calc(10px + var(--safe-top)) 12px 0;
       pointer-events: none;
     }
 
@@ -69,16 +71,15 @@
       flex: 1;
       height: 3px;
       border-radius: 2px;
-      background: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.18);
       overflow: hidden;
     }
 
     .progress-seg .fill {
       height: 100%;
       width: 0%;
-      background: var(--white);
+      background: var(--lima);
       border-radius: 2px;
-      transform-origin: left center;
     }
 
     .progress-seg.done .fill { width: 100%; }
@@ -99,23 +100,21 @@
       inset: 0;
       display: none;
       flex-direction: column;
-      padding: calc(36px + var(--safe-top)) 1.5rem calc(1.5rem + var(--safe-bottom));
-      background: linear-gradient(165deg, var(--red-deep) 0%, var(--red) 48%, #8f0406 100%);
+      padding: calc(40px + var(--safe-top)) 1.35rem calc(1.4rem + var(--safe-bottom));
+      background: var(--bg);
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
     }
 
-    .slide.active { display: flex; }
+    .slide.active {
+      display: flex;
+      animation: slideIn var(--snap) ease-out;
+    }
 
-    .slide::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 90% 45% at 50% -5%, rgba(190, 170, 133, 0.32), transparent 55%),
-        radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.25), transparent 45%);
-      pointer-events: none;
+    @keyframes slideIn {
+      from { opacity: 0.85; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .slide-inner {
@@ -131,156 +130,297 @@
 
     .slide.form-slide .slide-inner {
       justify-content: flex-start;
-      padding-top: 0.5rem;
+      padding-top: 0.25rem;
       pointer-events: auto;
     }
 
+    /* Ambient soft glow — not purple/orange full-bleed */
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 40% at 80% -10%, rgba(200, 240, 0, 0.08), transparent 50%),
+        radial-gradient(ellipse 50% 35% at 0% 100%, rgba(255, 107, 44, 0.06), transparent 45%);
+      pointer-events: none;
+    }
+
+    .slide.hero-energy::before {
+      background:
+        radial-gradient(ellipse 90% 55% at 50% 0%, rgba(200, 240, 0, 0.16), transparent 55%),
+        radial-gradient(ellipse 40% 30% at 100% 90%, rgba(255, 107, 44, 0.1), transparent 50%);
+    }
+
+    .slide.grain::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.07;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 160px 160px;
+      mix-blend-mode: overlay;
+    }
+
     .kicker {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.85rem;
+      color: var(--lima);
+      margin-bottom: 0.75rem;
     }
 
     .slide h1 {
-      font-family: "Inter", "DM Sans", system-ui, sans-serif;
-      font-size: clamp(1.75rem, 7vw, 2.15rem);
-      font-weight: 700;
-      letter-spacing: -0.025em;
-      line-height: 1.15;
+      font-size: clamp(2rem, 8vw, 2.55rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
       margin-bottom: 0.85rem;
     }
 
     .slide h2 {
-      font-family: "Inter", "DM Sans", system-ui, sans-serif;
-      font-size: clamp(1.45rem, 6vw, 1.85rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
+      font-size: clamp(1.65rem, 6.5vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      margin-bottom: 0.7rem;
     }
 
     .lead {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
+      font-weight: 400;
       line-height: 1.45;
-      opacity: 0.93;
+      color: var(--muted);
       max-width: 18em;
     }
 
-    .gold-line {
-      width: 44px;
-      height: 3px;
-      background: var(--gold);
-      border-radius: 2px;
-      margin: 1.15rem 0 0;
-    }
+    .lead strong { color: var(--text); font-weight: 600; }
 
     .badge-pill {
-      display: inline-block;
+      display: inline-flex;
       align-self: flex-start;
+      align-items: center;
       font-size: 0.68rem;
       font-weight: 600;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid rgba(190, 170, 133, 0.5);
-      padding: 0.35rem 0.7rem;
+      color: var(--bg);
+      background: var(--lima);
+      padding: 0.4rem 0.75rem;
       border-radius: 999px;
       margin-bottom: 1rem;
-      background: rgba(0, 0, 0, 0.15);
     }
 
-    .fact-stack { margin-top: 0.5rem; }
+    .lima-block {
+      display: inline-block;
+      background: var(--lima);
+      color: var(--bg);
+      font-weight: 800;
+      font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      padding: 0.55rem 0.85rem;
+      border-radius: 14px;
+      margin: 0.35rem 0 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.15rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .card + .card { margin-top: 0.7rem; }
+
+    .fact-stack { display: flex; flex-direction: column; gap: 0.7rem; }
 
     .fact {
-      padding: 0.85rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
-
-    .fact:last-child { border-bottom: none; }
 
     .fact-label {
       font-size: 0.68rem;
       font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.2rem;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
     }
 
     .fact-value {
-      font-size: 1.15rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
+      font-size: clamp(1.25rem, 5vw, 1.55rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--text);
     }
+
+    .fact-value.lima { color: var(--lima); }
 
     .fact-sub {
-      font-size: 0.9rem;
-      opacity: 0.85;
-      margin-top: 0.15rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      font-weight: 400;
     }
 
-    .modality-list { margin-top: 0.35rem; }
+    .big-num {
+      font-size: clamp(2.6rem, 12vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .big-num .unit {
+      font-size: 0.4em;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+      margin-left: 0.15em;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 0.85rem 0 0.35rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .pill .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--lima);
+      flex-shrink: 0;
+    }
+
+    .pill.energy .dot { background: var(--energy); }
+
+    .dist-grid {
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 0.4rem;
+    }
+
+    .dist-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .dist-card .label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .dist-card .num {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--lima);
+    }
+
+    .modality-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.35rem; }
 
     .modality-item {
-      padding: 0.7rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
-
-    .modality-item:last-child { border-bottom: none; }
 
     .modality-item strong {
       display: block;
       font-size: 1.05rem;
-      margin-bottom: 0.15rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
     }
 
     .modality-item span {
-      font-size: 0.9rem;
-      opacity: 0.85;
+      font-size: 0.88rem;
+      color: var(--muted);
     }
 
-    .prize-list {
-      list-style: none;
-      margin-top: 0.5rem;
-    }
-
-    .prize-list li {
+    .prize-row {
       display: flex;
-      align-items: flex-start;
-      gap: 0.55rem;
-      padding: 0.55rem 0;
-      font-size: 1.05rem;
-      font-weight: 500;
+      gap: 0.5rem;
+      margin: 0.75rem 0 1rem;
     }
 
-    .prize-list li::before {
-      content: "★";
-      color: var(--gold);
-      font-size: 0.85rem;
-      margin-top: 0.15rem;
+    .prize-badge {
+      flex: 1;
+      text-align: center;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 0.9rem 0.4rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
+
+    .prize-badge .place {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--lima);
+      display: block;
+      line-height: 1;
+    }
+
+    .prize-badge .lbl {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.35rem;
+    }
+
+    .prize-badge:nth-child(1) .place { color: var(--lima); }
+    .prize-badge:nth-child(2) .place { color: var(--text); }
+    .prize-badge:nth-child(3) .place { color: var(--energy); }
+
+    .cat-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
     .hint-tap {
       position: absolute;
       bottom: calc(1.25rem + var(--safe-bottom));
-      left: 0;
-      right: 0;
+      left: 0; right: 0;
       z-index: 5;
       text-align: center;
-      font-size: 0.72rem;
-      letter-spacing: 0.06em;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.55);
+      color: var(--muted);
       pointer-events: none;
-      transition: opacity 0.4s;
+      transition: opacity var(--snap);
     }
 
     .hint-tap.hidden { opacity: 0; }
 
-    /* Tap zones (stories navigation) — above content except form */
     .tap-zones {
       position: absolute;
       inset: 0;
@@ -300,76 +440,111 @@
     .tap-left { width: 30%; }
     .tap-right { width: 70%; }
 
-    .stories.form-active .tap-zones {
+    .stories.form-active .tap-zones { display: none; }
+
+    .nav-back {
+      position: absolute;
+      top: calc(28px + var(--safe-top));
+      left: 10px;
+      z-index: 35;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
       display: none;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform var(--snap), background var(--snap);
     }
 
-    /* Form slide */
+    .nav-back:active { transform: scale(0.94); background: var(--surface-2); }
+    .stories.form-active .nav-back { display: flex; }
+
+    /* Form */
+    .form-header-meta { margin-bottom: 0.85rem; }
+    .form-header-meta .lead-sm {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
     .form-card {
-      background: var(--cream);
-      color: var(--ink);
-      border-radius: 18px;
-      padding: 1.2rem 1.1rem 1.15rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-      margin-top: 0.35rem;
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 28px;
+      padding: 1.25rem 1.15rem 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
       pointer-events: auto;
     }
 
     .form-card h2 {
-      color: var(--red-deep);
-      font-size: 1.25rem;
-      margin-bottom: 0.25rem;
+      color: var(--text);
+      font-size: 1.35rem;
+      margin-bottom: 0.2rem;
     }
 
     .form-intro {
       font-size: 0.88rem;
-      color: var(--ink-muted);
+      color: var(--muted);
       margin-bottom: 1rem;
     }
 
-    .field { margin-bottom: 0.8rem; }
+    .field { margin-bottom: 0.75rem; }
 
     .field label {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
-      color: var(--ink);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
       margin-bottom: 0.3rem;
     }
 
     .field input,
     .field select {
       width: 100%;
-      padding: 0.72rem 0.8rem;
+      padding: 0.78rem 0.85rem;
       font-size: 1rem;
       font-family: inherit;
-      border: 1.5px solid rgba(190, 170, 133, 0.6);
-      border-radius: 12px;
-      background: #fff;
-      color: var(--ink);
+      font-weight: 500;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      background: var(--bg);
+      color: var(--text);
       outline: none;
       -webkit-appearance: none;
       appearance: none;
+      transition: border-color var(--snap), box-shadow var(--snap);
     }
 
     .field select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23AA0508' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C8F000' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 0.85rem center;
+      background-color: var(--bg);
       padding-right: 2.1rem;
     }
 
+    .field input::placeholder { color: #5a605c; }
+
     .field input:focus,
     .field select:focus {
-      border-color: var(--red);
-      box-shadow: 0 0 0 3px rgba(229, 30, 35, 0.15);
+      border-color: var(--lima);
+      box-shadow: 0 0 0 3px rgba(200, 240, 0, 0.18);
     }
 
     .error-msg {
       display: none;
       font-size: 0.8rem;
-      color: var(--red-deep);
-      margin-bottom: 0.65rem;
+      color: var(--energy);
+      margin-bottom: 0.6rem;
     }
 
     .error-msg.visible { display: block; }
@@ -380,41 +555,54 @@
       justify-content: center;
       gap: 0.45rem;
       width: 100%;
-      padding: 0.9rem 1.1rem;
+      padding: 0.95rem 1.1rem;
       font-family: inherit;
       font-size: 1rem;
       font-weight: 700;
       text-align: center;
       text-decoration: none;
       border: none;
-      border-radius: 14px;
+      border-radius: 16px;
       cursor: pointer;
-      transition: transform 0.12s, opacity 0.15s;
+      transition: transform var(--snap), opacity var(--snap), background var(--snap);
     }
 
-    .btn:active { transform: scale(0.98); }
+    .btn:active { transform: scale(0.97); }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--red) 0%, var(--red-deep) 100%);
-      color: var(--white);
-      box-shadow: 0 4px 14px rgba(170, 5, 8, 0.35);
+    .btn-lima {
+      background: linear-gradient(180deg, var(--lima) 0%, var(--lima-deep) 100%);
+      color: var(--bg);
+      box-shadow: 0 4px 20px rgba(200, 240, 0, 0.22);
+    }
+
+    .btn-lima:active {
+      background: var(--lima-deep);
     }
 
     .btn-whatsapp {
-      background: #25D366;
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
-      margin-top: 0.65rem;
+      background: #1f2a22;
+      color: var(--text);
+      border: 1px solid rgba(37, 211, 102, 0.45);
+      margin-top: 0.6rem;
     }
 
     .btn-whatsapp svg {
       width: 20px;
       height: 20px;
-      fill: currentColor;
+      fill: #25D366;
       flex-shrink: 0;
     }
 
     .btn-whatsapp.hidden { display: none; }
+
+    .btn-whatsapp.primary-wa {
+      background: #25D366;
+      color: #062510;
+      border: none;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-whatsapp.primary-wa svg { fill: #062510; }
 
     .form-success {
       display: none;
@@ -426,50 +614,17 @@
 
     .form-success p {
       font-size: 0.9rem;
-      color: var(--ink-muted);
+      color: var(--muted);
       margin-bottom: 0.15rem;
     }
 
-    .form-success strong { color: var(--red-deep); }
+    .form-success strong { color: var(--lima); }
 
-    .form-header-meta {
-      margin-bottom: 0.75rem;
-    }
-
-    .form-header-meta .kicker {
-      margin-bottom: 0.4rem;
-    }
-
-    .form-header-meta .lead-sm {
-      font-size: 0.95rem;
-      opacity: 0.9;
-      line-height: 1.4;
-    }
-
-    .nav-back {
-      position: absolute;
-      top: calc(28px + var(--safe-top));
-      left: 10px;
-      z-index: 35;
-      width: 36px;
-      height: 36px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.25);
-      color: #fff;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-    }
-
-    .stories.form-active .nav-back { display: flex; }
-
-    .wa-icon-path {
-      /* placeholder for reuse */
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -484,46 +639,52 @@
       <button type="button" class="tap-right" id="tap-right" aria-label="Siguiente"></button>
     </div>
 
-    <!-- 0 -->
-    <section class="slide active" data-i="0">
+    <!-- 0 Intro -->
+    <section class="slide hero-energy active" data-i="0">
       <div class="slide-inner">
         <span class="badge-pill">Invitación especial</span>
         <p class="kicker">Cartilla Gracia</p>
-        <h1>Te presentamos<br>Gracia Latidos 2026</h1>
-        <p class="lead">Una invitación personal para correr, pedalear y nadar juntos por un mismo propósito.</p>
-        <div class="gold-line"></div>
+        <h1>Te presentamos<br>Gracia Latidos<br>2026</h1>
+        <p class="lead">Una invitación personal para nadar, pedalear y correr juntos por un mismo propósito.</p>
+        <div class="pills" style="pointer-events:none">
+          <span class="pill"><span class="dot"></span>Triatlón</span>
+          <span class="pill energy"><span class="dot"></span>Intereclesial</span>
+        </div>
       </div>
       <p class="hint-tap" id="hint-tap">Toca para continuar</p>
     </section>
 
-    <!-- 1 -->
+    <!-- 1 Edition -->
     <section class="slide" data-i="1">
       <div class="slide-inner">
         <p class="kicker">El evento</p>
-        <h2>Segunda edición</h2>
-        <p class="lead">Triatlón intereclesial. Un encuentro de iglesias, cuerpo y comunidad.</p>
-        <div class="gold-line"></div>
+        <div class="lima-block">2ª edición</div>
+        <h2>Triatlón<br>intereclesial</h2>
+        <p class="lead">Un encuentro de iglesias, cuerpo y comunidad. Nos encantaría contar contigo.</p>
       </div>
     </section>
 
-    <!-- 2 -->
-    <section class="slide" data-i="2">
+    <!-- 2 Place — share-style grain -->
+    <section class="slide grain" data-i="2">
       <div class="slide-inner">
-        <p class="kicker">Lugar</p>
-        <h2>Escuela Militar Esmil</h2>
-        <p class="lead">Parcayacu, Quito, Ecuador</p>
-        <div class="gold-line"></div>
+        <p class="kicker">Dónde</p>
+        <h2>Escuela Militar<br>Esmil</h2>
+        <div class="card" style="margin-top:1rem;pointer-events:none">
+          <p class="fact-label">Ubicación</p>
+          <p class="fact-value" style="font-size:1.2rem">Parcayacu, Quito</p>
+          <p class="fact-sub">Ecuador</p>
+        </div>
       </div>
     </section>
 
-    <!-- 3 -->
+    <!-- 3 Date / fee / close -->
     <section class="slide" data-i="3">
       <div class="slide-inner">
-        <p class="kicker">Fecha e inscripción</p>
+        <p class="kicker">Cuándo e inscripción</p>
         <div class="fact-stack">
           <div class="fact">
             <p class="fact-label">Fecha del evento</p>
-            <p class="fact-value">14 de noviembre de 2026</p>
+            <p class="fact-value lima">14 de noviembre de 2026</p>
           </div>
           <div class="fact">
             <p class="fact-label">Cierre de inscripciones</p>
@@ -531,35 +692,41 @@
           </div>
           <div class="fact">
             <p class="fact-label">Costo</p>
-            <p class="fact-value">30 dólares</p>
+            <p class="fact-value"><span class="big-num" style="font-size:1.8rem">$30</span></p>
             <p class="fact-sub">El pago se coordina por WhatsApp (transferencia).</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4 -->
+    <!-- 4 Distances -->
     <section class="slide" data-i="4">
       <div class="slide-inner">
         <p class="kicker">Distancias</p>
-        <div class="fact-stack">
-          <div class="fact">
-            <p class="fact-label">Natación</p>
-            <p class="fact-value">250 m</p>
+        <h2>Tres tramos.<br>Un latido.</h2>
+        <div class="pills" style="pointer-events:none">
+          <span class="pill"><span class="dot"></span>Natación</span>
+          <span class="pill energy"><span class="dot"></span>Ciclismo</span>
+          <span class="pill"><span class="dot"></span>Carrera</span>
+        </div>
+        <div class="dist-grid">
+          <div class="dist-card">
+            <span class="label">Natación</span>
+            <span class="num">250<span style="font-size:0.55em;color:var(--muted);font-weight:600"> m</span></span>
           </div>
-          <div class="fact">
-            <p class="fact-label">Ciclismo</p>
-            <p class="fact-value">10 km</p>
+          <div class="dist-card">
+            <span class="label">Ciclismo</span>
+            <span class="num">10<span style="font-size:0.55em;color:var(--muted);font-weight:600"> km</span></span>
           </div>
-          <div class="fact">
-            <p class="fact-label">Carrera</p>
-            <p class="fact-value">5 km</p>
+          <div class="dist-card">
+            <span class="label">Carrera</span>
+            <span class="num">5<span style="font-size:0.55em;color:var(--muted);font-weight:600"> km</span></span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 5 -->
+    <!-- 5 Modalidades -->
     <section class="slide" data-i="5">
       <div class="slide-inner">
         <p class="kicker">Modalidades</p>
@@ -580,21 +747,25 @@
       </div>
     </section>
 
-    <!-- 6 -->
+    <!-- 6 Premios -->
     <section class="slide" data-i="6">
       <div class="slide-inner">
         <p class="kicker">Premios</p>
-        <h2>1.º · 2.º · 3.º</h2>
-        <ul class="prize-list">
-          <li>Triatlón masculino</li>
-          <li>Triatlón femenino</li>
-          <li>Relevo</li>
-        </ul>
-        <p class="lead" style="margin-top:1rem;font-size:0.95rem;">En cada modalidad.</p>
+        <h2>Podio por<br>modalidad</h2>
+        <div class="prize-row" style="pointer-events:none">
+          <div class="prize-badge"><span class="place">1.º</span><span class="lbl">Lugar</span></div>
+          <div class="prize-badge"><span class="place">2.º</span><span class="lbl">Lugar</span></div>
+          <div class="prize-badge"><span class="place">3.º</span><span class="lbl">Lugar</span></div>
+        </div>
+        <div class="cat-pills" style="pointer-events:none">
+          <span class="pill"><span class="dot"></span>Masculino</span>
+          <span class="pill"><span class="dot"></span>Femenino</span>
+          <span class="pill energy"><span class="dot"></span>Relevo</span>
+        </div>
       </div>
     </section>
 
-    <!-- 7 — form -->
+    <!-- 7 Form -->
     <section class="slide form-slide" data-i="7" id="form-slide">
       <div class="slide-inner">
         <div class="form-header-meta">
@@ -623,12 +794,12 @@
               </select>
             </div>
             <p class="error-msg" id="form-error" role="alert">Por favor, completa nombre, apellido y disciplina.</p>
-            <button type="submit" class="btn btn-primary" id="submit-btn">Enviar preinscripción</button>
+            <button type="submit" class="btn btn-lima" id="submit-btn">Enviar preinscripción</button>
           </form>
           <div class="form-success" id="form-success">
             <p>¡Listo, <strong id="success-name"></strong>!</p>
             <p>Continúa por WhatsApp para el siguiente paso.</p>
-            <a class="btn btn-whatsapp hidden" id="wa-continuar" href="#" target="_blank" rel="noopener noreferrer">
+            <a class="btn btn-whatsapp primary-wa hidden" id="wa-continuar" href="#" target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               Continuar
             </a>
@@ -660,7 +831,6 @@
       var touchStartT = 0;
       var holding = false;
 
-      /* Build progress segments */
       slides.forEach(function () {
         var seg = document.createElement("div");
         seg.className = "progress-seg";
@@ -680,12 +850,11 @@
         }
       }
 
-      function updateProgress(resetActive) {
+      function updateProgress() {
         segs.forEach(function (seg, i) {
           seg.classList.remove("done", "active", "paused");
           var fill = seg.querySelector(".fill");
           fill.style.animation = "none";
-          /* force reflow */
           void fill.offsetWidth;
           fill.style.animation = "";
           if (i < current) {
@@ -694,7 +863,6 @@
             seg.classList.add("active");
             if (paused) seg.classList.add("paused");
           } else if (i === current && isForm(current)) {
-            /* form: show full bar as "current done-ish" */
             seg.classList.add("done");
           }
         });
@@ -709,11 +877,10 @@
         root.classList.toggle("form-active", isForm(current));
         if (hint && fromUser) hint.classList.add("hidden");
         if (hint && current === 0 && !fromUser) hint.classList.remove("hidden");
-        updateProgress(true);
+        updateProgress();
         if (!isForm(current) && !paused) {
           timer = setTimeout(function () { next(false); }, DURATION);
         }
-        /* scroll form to top when entering */
         if (isForm(current)) {
           slides[current].scrollTop = 0;
         }
@@ -740,8 +907,7 @@
       function resume() {
         if (isForm(current) || !paused) return;
         paused = false;
-        /* restart remaining roughly as full duration — simple V2 */
-        updateProgress(true);
+        updateProgress();
         timer = setTimeout(function () { next(false); }, DURATION);
       }
 
@@ -762,7 +928,6 @@
         prev(true);
       });
 
-      /* Swipe + hold-to-pause */
       root.addEventListener("touchstart", function (e) {
         if (isForm(current) && e.target.closest(".form-card")) return;
         var t = e.changedTouches[0];
@@ -780,24 +945,17 @@
           holding = false;
           return;
         }
-        var wasHolding = holding;
         holding = false;
         var t = e.changedTouches[0];
         var dx = t.clientX - touchStartX;
         var dy = t.clientY - touchStartY;
-        var dt = Date.now() - touchStartT;
 
         if (paused) resume();
 
-        /* swipe horizontal */
         if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) {
           if (dx < 0) next(true);
           else prev(true);
-          return;
         }
-
-        /* short tap (not handled by tap zones if form) — zones handle most taps */
-        if (!wasHolding) return;
       }, { passive: true });
 
       root.addEventListener("touchcancel", function () {
@@ -805,7 +963,6 @@
         if (paused) resume();
       }, { passive: true });
 
-      /* Keyboard for desktop testing */
       document.addEventListener("keydown", function (e) {
         if (e.key === "ArrowRight" || e.key === " ") {
           e.preventDefault();
@@ -817,14 +974,10 @@
       });
 
       document.addEventListener("visibilitychange", function () {
-        if (document.hidden) {
-          pause();
-        } else if (!isForm(current)) {
-          resume();
-        }
+        if (document.hidden) pause();
+        else if (!isForm(current)) resume();
       });
 
-      /* WhatsApp */
       function buildMessage(nombre, apellido, disciplina) {
         var parts = [PHRASE];
         if (nombre || apellido) {
@@ -874,7 +1027,6 @@
         successEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
       });
 
-      /* Start */
       goTo(0, false);
     })();
   </script>
