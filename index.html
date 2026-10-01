@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <style>
     :root {
       --bg: #0F1110;
@@ -423,10 +424,12 @@
 
     .tap-zones {
       position: absolute;
-      inset: 0;
+      top: calc(28px + var(--safe-top));
+      left: 0;
+      right: 0;
+      bottom: calc(68px + var(--safe-bottom));
       z-index: 20;
       display: flex;
-      padding-top: calc(28px + var(--safe-top));
     }
 
     .tap-left, .tap-right {
@@ -626,6 +629,187 @@
       gap: 0.4rem;
       margin-top: 1rem;
     }
+  
+    /* Location map card — Strava-soft / neo-sport */
+    .loc-block {
+      margin-top: 0.85rem;
+      pointer-events: none;
+    }
+
+    .map-card {
+      position: relative;
+      background: #141716;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .map-canvas {
+      height: 168px;
+      width: 100%;
+      background: #121514;
+      filter: saturate(0.35) brightness(0.92);
+    }
+
+    .map-canvas .leaflet-control-attribution {
+      font-size: 8px !important;
+      background: rgba(15, 17, 16, 0.75) !important;
+      color: #6a706c !important;
+      max-width: 70%;
+    }
+
+    .map-canvas .leaflet-control-attribution a { color: #8B918C !important; }
+
+    .map-fade {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 48px;
+      background: linear-gradient(transparent, rgba(20, 23, 22, 0.92));
+      pointer-events: none;
+      z-index: 450;
+    }
+
+    .pin-wrap {
+      position: relative;
+      width: 28px;
+      height: 36px;
+      margin-left: -14px;
+      margin-top: -36px;
+    }
+
+    .pin-wrap .pin-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50% 50% 50% 0;
+      background: #C8F000;
+      transform: rotate(-45deg);
+      box-shadow: 0 0 0 4px rgba(200, 240, 0, 0.22), 0 6px 14px rgba(0, 0, 0, 0.45);
+      position: absolute;
+      top: 4px;
+      left: 5px;
+    }
+
+    .pin-wrap .pin-core {
+      position: absolute;
+      top: 9px;
+      left: 10px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #0F1110;
+      z-index: 1;
+    }
+
+    .map-label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 460;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(15, 17, 16, 0.88);
+      border: 1px solid rgba(200, 240, 0, 0.35);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .map-label .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #C8F000;
+      box-shadow: 0 0 0 0 rgba(200, 240, 0, 0.5);
+      animation: pinPulse 1.8s ease-out infinite;
+    }
+
+    @keyframes pinPulse {
+      0% { box-shadow: 0 0 0 0 rgba(200, 240, 0, 0.45); }
+      70% { box-shadow: 0 0 0 8px rgba(200, 240, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(200, 240, 0, 0); }
+    }
+
+    .loc-meta {
+      margin-top: 0.7rem;
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 0.95rem 1.05rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .loc-meta .addr {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.35;
+      margin-top: 0.2rem;
+    }
+
+    .loc-meta .addr-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    .maps-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.85rem 1rem;
+      border-radius: 16px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: var(--bg);
+      background: linear-gradient(180deg, #C8F000 0%, #B6F500 100%);
+      box-shadow: 0 4px 18px rgba(200, 240, 0, 0.2);
+      pointer-events: auto;
+      transition: transform 200ms, background 200ms, opacity 200ms;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .maps-cta:active { transform: scale(0.97); background: #B6F500; }
+
+    .maps-cta svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    .maps-cta-float {
+      position: absolute;
+      left: 1.35rem;
+      right: 1.35rem;
+      bottom: calc(1rem + var(--safe-bottom));
+      z-index: 30;
+      width: auto;
+    }
+
+    .maps-cta-float[hidden] {
+      display: none !important;
+    }
+
+    .slide.place-slide .slide-inner {
+      justify-content: flex-start;
+      padding-top: 0.15rem;
+    }
+
+    .slide.place-slide h2 {
+      font-size: clamp(1.45rem, 5.5vw, 1.85rem);
+      margin-bottom: 0.15rem;
+    }
+
   </style>
 </head>
 <body>
@@ -638,6 +822,13 @@
       <button type="button" class="tap-left" id="tap-left" aria-label="Anterior"></button>
       <button type="button" class="tap-right" id="tap-right" aria-label="Siguiente"></button>
     </div>
+
+    <a class="maps-cta maps-cta-float" id="maps-cta" hidden
+       href="https://maps.apple.com/?ll=-0.08503,-78.48708&q=ESMIL%20Parcayacu"
+       target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+      Abrir en Maps
+    </a>
 
     <!-- 0 Intro -->
     <section class="slide hero-energy active" data-i="0">
@@ -664,15 +855,22 @@
       </div>
     </section>
 
-    <!-- 2 Place — share-style grain -->
-    <section class="slide grain" data-i="2">
+    <!-- 2 Place — location map card -->
+    <section class="slide grain place-slide" data-i="2">
       <div class="slide-inner">
         <p class="kicker">Dónde</p>
-        <h2>Escuela Militar<br>Esmil</h2>
-        <div class="card" style="margin-top:1rem;pointer-events:none">
-          <p class="fact-label">Ubicación</p>
-          <p class="fact-value" style="font-size:1.2rem">Parcayacu, Quito</p>
-          <p class="fact-sub">Ecuador</p>
+        <h2>Escuela Militar Esmil</h2>
+        <div class="loc-block">
+          <div class="map-card">
+            <div class="map-label"><span class="pulse" aria-hidden="true"></span> ESMIL · Parcayacu</div>
+            <div id="loc-map" class="map-canvas" role="img" aria-label="Mapa de ESMIL, Parcayacu, Quito"></div>
+            <div class="map-fade" aria-hidden="true"></div>
+          </div>
+          <div class="loc-meta">
+            <p class="fact-label">Ubicación</p>
+            <p class="addr">Esmil Parc Ayacu · Parcayacu, Quito</p>
+            <p class="addr-sub">Av. Manuel Córdova Galarza, vía Mitad del Mundo</p>
+          </div>
         </div>
       </div>
     </section>
@@ -813,6 +1011,7 @@
     </section>
   </div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
     (function () {
       var WA_BASE = "https://wa.me/593963510138?text=";
@@ -838,6 +1037,51 @@
         progressEl.appendChild(seg);
       });
       var segs = Array.prototype.slice.call(progressEl.querySelectorAll(".progress-seg"));
+
+      /* Location map (Leaflet + Carto dark — non-interactive) */
+      var LOC = { lat: -0.08503, lng: -78.48708 };
+      var locMap = null;
+      var mapReady = false;
+
+      function ensureLocMap() {
+        if (mapReady || typeof L === "undefined") return;
+        var el = document.getElementById("loc-map");
+        if (!el) return;
+        locMap = L.map(el, {
+          center: [LOC.lat, LOC.lng],
+          zoom: 14,
+          zoomControl: false,
+          attributionControl: true,
+          dragging: false,
+          scrollWheelZoom: false,
+          doubleClickZoom: false,
+          boxZoom: false,
+          keyboard: false,
+          touchZoom: false,
+          tap: false
+        });
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+          attribution: "&copy; OSM &copy; CARTO",
+          subdomains: "abcd",
+          maxZoom: 19
+        }).addTo(locMap);
+        var icon = L.divIcon({
+          className: "",
+          html: '<div class="pin-wrap"><span class="pin-core"></span><span class="pin-dot"></span></div>',
+          iconSize: [28, 36],
+          iconAnchor: [14, 36]
+        });
+        L.marker([LOC.lat, LOC.lng], { icon: icon, interactive: false }).addTo(locMap);
+        mapReady = true;
+        setTimeout(function () { if (locMap) locMap.invalidateSize(); }, 80);
+      }
+
+      function refreshLocMap() {
+        ensureLocMap();
+        if (locMap) {
+          setTimeout(function () { locMap.invalidateSize(); }, 60);
+        }
+      }
 
       function isForm(i) {
         return slides[i].classList.contains("form-slide");
@@ -883,6 +1127,15 @@
         }
         if (isForm(current)) {
           slides[current].scrollTop = 0;
+        }
+        var mapsCta = document.getElementById("maps-cta");
+        if (mapsCta) {
+          if (current === 2) {
+            mapsCta.hidden = false;
+            refreshLocMap();
+          } else {
+            mapsCta.hidden = true;
+          }
         }
       }
 
