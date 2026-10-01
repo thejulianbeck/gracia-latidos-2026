@@ -331,6 +331,51 @@
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--lima);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.15em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .odo {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.12em;
+    }
+
+    .odo-window {
+      display: inline-block;
+      height: 1.15em;
+      overflow: hidden;
+      line-height: 1.15;
+      vertical-align: baseline;
+    }
+
+    .odo-reel {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+      transition: none;
+    }
+
+    .odo.spinning .odo-reel {
+      transition: transform 1.15s cubic-bezier(0.22, 0.82, 0.28, 1);
+    }
+
+    .odo-val {
+      height: 1.15em;
+      line-height: 1.15;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    .odo-unit {
+      font-size: 0.55em;
+      color: var(--muted);
+      font-weight: 600;
     }
 
     .modality-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.35rem; }
@@ -949,7 +994,7 @@
     </section>
 
     <!-- 4 Distances -->
-    <section class="slide" data-i="4">
+    <section class="slide distances-slide" data-i="4" id="distances-slide">
       <div class="slide-inner">
         <p class="kicker">Distancias</p>
         <h2>Tres tramos.<br>Un latido.</h2>
@@ -958,18 +1003,27 @@
           <span class="pill energy"><span class="dot"></span>Ciclismo</span>
           <span class="pill"><span class="dot"></span>Carrera</span>
         </div>
-        <div class="dist-grid">
+        <div class="dist-grid" id="dist-grid">
           <div class="dist-card">
             <span class="label">Natación</span>
-            <span class="num">250<span style="font-size:0.55em;color:var(--muted);font-weight:600"> m</span></span>
+            <span class="num odo" data-steps="1500,1200,900,600,400,250" data-unit="m" aria-label="250 m">
+              <span class="odo-window"><span class="odo-reel"></span></span>
+              <span class="odo-unit">m</span>
+            </span>
           </div>
           <div class="dist-card">
             <span class="label">Ciclismo</span>
-            <span class="num">10<span style="font-size:0.55em;color:var(--muted);font-weight:600"> km</span></span>
+            <span class="num odo" data-steps="40,35,28,20,14,10" data-unit="km" aria-label="10 km">
+              <span class="odo-window"><span class="odo-reel"></span></span>
+              <span class="odo-unit">km</span>
+            </span>
           </div>
           <div class="dist-card">
             <span class="label">Carrera</span>
-            <span class="num">5<span style="font-size:0.55em;color:var(--muted);font-weight:600"> km</span></span>
+            <span class="num odo" data-steps="10,9,8,7,6,5" data-unit="km" aria-label="5 km">
+              <span class="odo-window"><span class="odo-reel"></span></span>
+              <span class="odo-unit">km</span>
+            </span>
           </div>
         </div>
       </div>
@@ -1097,8 +1151,60 @@
         });
       }
 
+      /* Distances number-roulette (Olympic → Latidos) */
+      var distHoldTimer = null;
+      var odos = Array.prototype.slice.call(document.querySelectorAll(".odo"));
+
+      function buildOdoReel(odo) {
+        var reel = odo.querySelector(".odo-reel");
+        var steps = odo.getAttribute("data-steps").split(",");
+        reel.innerHTML = steps.map(function (n) {
+          return '<span class="odo-val">' + n.trim() + "</span>";
+        }).join("");
+        reel.style.transform = "translate3d(0,0,0)";
+        odo.classList.remove("spinning");
+      }
+
+      odos.forEach(buildOdoReel);
+
+      function resetDistRoulette() {
+        if (distHoldTimer) {
+          clearTimeout(distHoldTimer);
+          distHoldTimer = null;
+        }
+        odos.forEach(function (odo) {
+          odo.classList.remove("spinning");
+          var reel = odo.querySelector(".odo-reel");
+          reel.style.transition = "none";
+          reel.style.transform = "translate3d(0,0,0)";
+          void reel.offsetWidth;
+          reel.style.transition = "";
+        });
+      }
+
+      function playDistRoulette() {
+        resetDistRoulette();
+        /* Hold official triathlon distances, then reel down */
+        distHoldTimer = setTimeout(function () {
+          distHoldTimer = null;
+          odos.forEach(function (odo, idx) {
+            var reel = odo.querySelector(".odo-reel");
+            var steps = odo.getAttribute("data-steps").split(",");
+            var line = reel.querySelector(".odo-val");
+            var lineH = line ? line.offsetHeight : reel.offsetHeight / steps.length;
+            var target = -lineH * (steps.length - 1);
+            /* stagger slightly for mechanical feel */
+            setTimeout(function () {
+              odo.classList.add("spinning");
+              reel.style.transform = "translate3d(0," + target + "px,0)";
+            }, idx * 90);
+          });
+        }, 800);
+      }
+
       function goTo(i, fromUser) {
         if (i < 0 || i >= slides.length) return;
+        var leaving = current;
         slides[current].classList.remove("active");
         current = i;
         slides[current].classList.add("active");
@@ -1110,6 +1216,10 @@
         if (isForm(current)) {
           slides[current].scrollTop = 0;
         }
+        var onDist = slides[current].classList.contains("distances-slide");
+        var wasDist = slides[leaving].classList.contains("distances-slide");
+        if (!onDist && wasDist) resetDistRoulette();
+        if (onDist) playDistRoulette();
       }
 
       function next(fromUser) {
