@@ -158,7 +158,7 @@
     }
 
     /* Form slide: floating nav-back hidden (covers kicker/lead).
-       #form-back also hidden — prev via bottom-left tap zone + swipe. */
+       The bottom-left form arrow remains visible alongside tap/swipe prev. */
     .stories.form-active .nav-back { display: none !important; }
 
     .form-back {
@@ -183,8 +183,7 @@
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
     }
 
-    /* Hidden on purpose: empty bottom-left + tap/swipe go prev (no lonely arrow) */
-    .stories.form-active .form-back { display: none !important; }
+    .stories.form-active .form-back { display: flex !important; }
 
     .form-back:active { transform: scale(0.94); background: var(--surface-2); }
 
@@ -378,12 +377,17 @@
       color: rgba(255, 255, 255, 0.88);
       max-width: 22rem;
     }
+    .slide.edition-slide > .lead {
+      position: relative;
+      z-index: 1;
+      margin: auto 0 0.75rem;
+    }
     .edition-strip {
       position: relative;
       z-index: 2;
       flex: 0 0 auto;
       width: 100%;
-      margin-top: auto;
+      margin-top: 0;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 7px;
@@ -1154,13 +1158,13 @@
     <!-- 0 Intro -->
     <section class="slide hero-energy active" data-i="0">
       <div class="slide-inner">
-        <h1 class="reveal reveal-d2">Te invitamos a</h1>
-        <img class="hero-logo reveal reveal-d3" src="assets/logo-gracia-latidos-white.png" alt="Gracia Latidos 2026" width="400" height="68" decoding="async" />
-        <p class="lead reveal reveal-d4">Nadar, pedalear y correr juntos.</p>
+        <span class="badge-pill reveal reveal-d1">Invitación especial</span>
+        <img class="hero-logo reveal reveal-d2" src="assets/logo-gracia-latidos-white.png" alt="Gracia Latidos 2026" width="400" height="68" decoding="async" />
+        <p class="lead reveal reveal-d4">Una invitación personal para nadar, pedalear y correr juntos por un mismo propósito.</p>
         <div class="pills reveal reveal-d5" style="pointer-events:none">
           <span class="pill"><span class="dot"></span>Triatlón</span>
-          <span class="pill"><span class="dot"></span>Familiar</span>
-          <span class="pill energy"><span class="dot"></span>Iglesia</span>
+          <span class="pill"><span class="dot"></span>Ambiente familiar</span>
+          <span class="pill energy"><span class="dot"></span>Contexto de iglesia</span>
         </div>
       </div>
       <p class="hint-tap" id="hint-tap">Toca para continuar</p>
@@ -1175,8 +1179,8 @@
       <div class="slide-inner">
         <p class="kicker reveal reveal-d1">El evento</p>
         <div class="lima-block reveal reveal-d2">2ª edición</div>
-        <p class="lead reveal reveal-d4">La primera vez fue espectacular, esta vez será todavía mejor.</p>
       </div>
+      <p class="lead reveal reveal-d4">La primera vez fue espectacular, esta vez será todavía mejor.</p>
       <div class="edition-strip" aria-label="Momentos Gracia Latidos">
         <img class="edition-thumb" src="assets/edition-swim.jpg" alt="Natación" width="480" height="320" decoding="async" />
         <img class="edition-thumb" src="assets/edition-arch.jpg" alt="Arco de meta" width="480" height="320" decoding="async" />
