@@ -157,36 +157,8 @@
       pointer-events: auto;
     }
 
-    /* Form slide: floating nav-back hidden (covers kicker/lead).
-       The bottom-left form arrow remains visible alongside tap/swipe prev. */
+    /* Form slide: the left third of the tap zone navigates back. */
     .stories.form-active .nav-back { display: none !important; }
-
-    .form-back {
-      position: absolute;
-      /* The form card owns the CTA row, so center the arrow against it. */
-      bottom: calc(1.2rem + 3px);
-      left: -0.35rem;
-      z-index: 36;
-      width: 44px;
-      height: 44px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 50%;
-      background: var(--surface);
-      color: var(--text);
-      font-size: 1.35rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform var(--snap), background var(--snap);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
-    }
-
-    .stories.form-active .form-back { display: flex !important; }
-
-    .form-back:active { transform: scale(0.94); background: var(--surface-2); }
 
     .slide.form-slide {
       padding-bottom: calc(4.5rem + var(--safe-bottom));
@@ -675,15 +647,15 @@
     .tap-left { width: 30%; }
     .tap-right { width: 70%; }
 
-    /* Form: keep invisible prev hit-zone in empty bottom-left; hide tap-right */
+    /* Form: use the left third for prev, while the card stays fully interactive. */
     .stories.form-active .tap-zones {
-      display: flex;
-      top: auto;
-      bottom: 0;
-      height: calc(4.5rem + var(--safe-bottom));
-      z-index: 25;
+      top: calc(28px + var(--safe-top));
+      bottom: calc(72px + var(--safe-bottom));
+      /* The slide owns the surface; the root click handler keeps the edge active. */
+      z-index: 0;
+      pointer-events: none;
     }
-    .stories.form-active .tap-left { width: 42%; }
+    .stories.form-active .tap-left { width: 33.333%; }
     .stories.form-active .tap-right { display: none; }
 
     .nav-back {
@@ -720,6 +692,7 @@
 
     .form-card {
       position: relative;
+      z-index: 1;
       background: var(--surface);
       color: var(--text);
       border-radius: 28px;
@@ -731,7 +704,7 @@
     .form-card h2 {
       color: var(--text);
       font-size: 1.35rem;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.45rem;
     }
 
     .form-intro {
@@ -1161,7 +1134,7 @@
       <div class="slide-inner">
         <span class="badge-pill reveal reveal-d1">Invitación especial</span>
         <img class="hero-logo reveal reveal-d2" src="assets/logo-gracia-latidos-white.png" alt="Gracia Latidos 2026" width="400" height="68" decoding="async" />
-        <p class="lead reveal reveal-d4">Una invitación personal para<br>nadar, pedalear y correr juntos<br>por un mismo propósito</p>
+        <p class="lead reveal reveal-d4">Una invitación personal<br>para nadar, pedalear y correr juntos<br>con un mismo corazón.</p>
         <div class="pills reveal reveal-d5" style="pointer-events:none">
           <span class="pill"><span class="dot"></span>Triatlón</span>
           <span class="pill"><span class="dot"></span>Ambiente familiar</span>
@@ -1196,7 +1169,7 @@
         <div class="loc-block">
           <div class="loc-meta anim-loc">
             <p class="fact-label">Lugar</p>
-            <p class="addr">Escuela Superior Militar “Eloy Alfaro” • Parcayacu</p>
+            <p class="addr">Escuela Superior Militar “Eloy Alfaro”<br>Parcayacu, Quito</p>
             <p class="addr-sub">Av. Manuel Córdova Galarza, vía Mitad del Mundo</p>
           </div>
           <div class="map-card">
@@ -1331,7 +1304,6 @@
               Continuar
             </a>
           </div>
-          <button type="button" class="form-back" id="form-back" aria-label="Historia anterior">‹</button>
           <a class="btn btn-whatsapp cta-enter" id="wa-direct" href="#" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
             Comunicarme por WhatsApp
@@ -1352,6 +1324,7 @@
       var current = 0;
       var touchStartX = 0;
       var touchStartY = 0;
+      var touchStartedInFormCard = false;
 
       slides.forEach(function () {
         var seg = document.createElement("div");
@@ -1502,28 +1475,33 @@
         next(true);
       });
 
+      /* On the form, the card must win hit-testing; keep the left third active outside it. */
+      root.addEventListener("click", function (e) {
+        if (!isForm(current) || e.target.closest(".form-card") || e.target.closest(".maps-actions") || e.target.closest(".tap-zones")) return;
+        var rect = root.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX < rect.left + rect.width / 3) {
+          e.preventDefault();
+          prev(true);
+        }
+      });
+
       document.getElementById("nav-back").addEventListener("click", function (e) {
         e.preventDefault();
         prev(true);
       });
 
-      document.getElementById("form-back").addEventListener("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        prev(true);
-      });
-
       root.addEventListener("touchstart", function (e) {
-        if (isForm(current) && e.target.closest(".form-card")) return;
-        if (e.target.closest(".maps-actions")) return;
+        touchStartedInFormCard = isForm(current) && !!e.target.closest(".form-card");
+        if (touchStartedInFormCard || e.target.closest(".maps-actions")) return;
         var t = e.changedTouches[0];
         touchStartX = t.clientX;
         touchStartY = t.clientY;
       }, { passive: true });
 
       root.addEventListener("touchend", function (e) {
-        if (isForm(current) && e.target.closest(".form-card")) return;
-        if (e.target.closest(".maps-actions")) return;
+        var startedInFormCard = touchStartedInFormCard;
+        touchStartedInFormCard = false;
+        if (startedInFormCard || (isForm(current) && e.target.closest(".form-card")) || e.target.closest(".maps-actions")) return;
         var t = e.changedTouches[0];
         var dx = t.clientX - touchStartX;
         var dy = t.clientY - touchStartY;
