@@ -220,7 +220,20 @@
     .slide.active .reveal-d3 { animation-delay: 320ms; }
     .slide.active .reveal-d4 { animation-delay: 450ms; }
     .slide.active .reveal-d5 { animation-delay: 580ms; }
+    .slide.active .reveal-d6 { animation-delay: 700ms; }
     @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
+
+    .hero-logo {
+      display: block;
+      width: min(56vw, 196px);
+      max-width: 100%;
+      height: auto;
+      margin: 0 0 1.05rem;
+      align-self: flex-start;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
 
     .slide.grain::after {
       content: "";
@@ -1015,11 +1028,12 @@
     <!-- 0 Intro -->
     <section class="slide hero-energy active" data-i="0">
       <div class="slide-inner">
-        <span class="badge-pill reveal reveal-d1">Invitación especial</span>
-        <p class="kicker reveal reveal-d2">Cartilla Gracia</p>
-        <h1 class="reveal reveal-d3">Te presentamos<br>Gracia Latidos<br>2026</h1>
-        <p class="lead reveal reveal-d4">Una invitación personal para nadar, pedalear y correr juntos por un mismo propósito.</p>
-        <div class="pills reveal reveal-d5" style="pointer-events:none">
+        <img class="hero-logo reveal reveal-d1" src="assets/logo-gracia-latidos-white.png" alt="Gracia Latidos 2026" width="196" height="34" decoding="async" />
+        <span class="badge-pill reveal reveal-d2">Invitación especial</span>
+        <p class="kicker reveal reveal-d3">Cartilla Gracia</p>
+        <h1 class="reveal reveal-d4">Te presentamos<br>Gracia Latidos<br>2026</h1>
+        <p class="lead reveal reveal-d5">Una invitación personal para nadar, pedalear y correr juntos por un mismo propósito.</p>
+        <div class="pills reveal reveal-d6" style="pointer-events:none">
           <span class="pill"><span class="dot"></span>Triatlón</span>
           <span class="pill energy"><span class="dot"></span>Intereclesial</span>
         </div>
