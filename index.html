@@ -152,9 +152,42 @@
 
     .slide.form-slide .slide-inner {
       justify-content: flex-start;
-      padding-top: 0.25rem;
+      padding-top: 0.35rem;
       pointer-events: auto;
     }
+
+    /* Form slide: floating back would cover kicker/lead — hide it;
+       use inline form-back instead (same prev action). */
+    .stories.form-active .nav-back { display: none !important; }
+
+    .form-back-row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .form-back {
+      flex: 0 0 auto;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform var(--snap), background var(--snap);
+    }
+
+    .form-back:active { transform: scale(0.94); background: var(--surface-2); }
+
+    .form-back-row .form-header-copy { flex: 1; min-width: 0; }
 
     /* Ambient soft glow — not purple/orange full-bleed */
     .slide::before {
@@ -423,7 +456,7 @@
     }
 
     .odo.spinning .odo-reel {
-      transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 3.4s cubic-bezier(0.35, 0.0, 0.15, 1);
     }
     .odo.landed {
       animation: odoLandPulse 720ms ease-out;
@@ -546,7 +579,7 @@
     }
 
     .nav-back:active { transform: scale(0.94); background: var(--surface-2); }
-    .stories.form-active .nav-back { display: flex; }
+    /* floating nav-back hidden on form; inline #form-back used instead */
 
     /* Form */
     .form-header-meta { margin-bottom: 0.85rem; }
@@ -1160,8 +1193,13 @@
     <section class="slide form-slide" data-i="6" id="form-slide">
       <div class="slide-inner">
         <div class="form-header-meta">
-          <p class="kicker">Último paso</p>
-          <p class="lead-sm">Preinscríbete y continúa por WhatsApp. Nos encantará acompañarte.</p>
+          <div class="form-back-row">
+            <button type="button" class="form-back" id="form-back" aria-label="Historia anterior">‹</button>
+            <div class="form-header-copy">
+              <p class="kicker">Último paso</p>
+              <p class="lead-sm">Preinscríbete y continúa por WhatsApp. Nos encantará acompañarte.</p>
+            </div>
+          </div>
         </div>
         <div class="form-card">
           <h2>Preinscripción</h2>
@@ -1273,9 +1311,9 @@
       function playDistRoulette() {
         resetDistRoulette();
         odos.forEach(function (odo) { odo.classList.remove("landed"); });
-        var HOLD = 320;
-        var STAGGER = 160;
-        var FALL = 1100;
+        var HOLD = 380;
+        var STAGGER = 220;
+        var FALL = 3400;
         distHoldTimer = setTimeout(function () {
           distHoldTimer = null;
           odos.forEach(function (odo, idx) {
@@ -1367,6 +1405,12 @@
 
       document.getElementById("nav-back").addEventListener("click", function (e) {
         e.preventDefault();
+        prev(true);
+      });
+
+      document.getElementById("form-back").addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         prev(true);
       });
 
