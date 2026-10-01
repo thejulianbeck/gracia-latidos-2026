@@ -360,7 +360,7 @@
     }
 
     .odo.spinning .odo-reel {
-      transition: transform 1.15s cubic-bezier(0.22, 0.82, 0.28, 1);
+      transition: transform 3.4s cubic-bezier(0.35, 0.0, 0.15, 1);
     }
 
     .odo-val {
@@ -1006,21 +1006,21 @@
         <div class="dist-grid" id="dist-grid">
           <div class="dist-card">
             <span class="label">Natación</span>
-            <span class="num odo" data-steps="1500,1200,900,600,400,250" data-unit="m" aria-label="250 m">
+            <span class="num odo" data-steps="1500,1350,1200,1050,900,750,600,500,400,320,250" data-unit="m" aria-label="250 m">
               <span class="odo-window"><span class="odo-reel"></span></span>
               <span class="odo-unit">m</span>
             </span>
           </div>
           <div class="dist-card">
             <span class="label">Ciclismo</span>
-            <span class="num odo" data-steps="40,35,28,20,14,10" data-unit="km" aria-label="10 km">
+            <span class="num odo" data-steps="40,36,32,28,24,20,17,14,12,10" data-unit="km" aria-label="10 km">
               <span class="odo-window"><span class="odo-reel"></span></span>
               <span class="odo-unit">km</span>
             </span>
           </div>
           <div class="dist-card">
             <span class="label">Carrera</span>
-            <span class="num odo" data-steps="10,9,8,7,6,5" data-unit="km" aria-label="5 km">
+            <span class="num odo" data-steps="10,9.5,9,8.5,8,7.5,7,6.5,6,5.5,5" data-unit="km" aria-label="5 km">
               <span class="odo-window"><span class="odo-reel"></span></span>
               <span class="odo-unit">km</span>
             </span>
@@ -1197,9 +1197,9 @@
             setTimeout(function () {
               odo.classList.add("spinning");
               reel.style.transform = "translate3d(0," + target + "px,0)";
-            }, idx * 90);
+            }, idx * 160);
           });
-        }, 800);
+        }, 400);
       }
 
       function goTo(i, fromUser) {
