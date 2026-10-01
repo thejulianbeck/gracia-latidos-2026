@@ -312,7 +312,8 @@
 
     /* Edition Mood Spec — full-bleed B/N hero + 3-thumb strip */
     .slide.edition-slide {
-      padding-bottom: calc(1.35rem + 72px + var(--safe-bottom) + 12px);
+      /* strip height + Safari toolbar (~68px) + home-indicator safe-area + margin */
+      padding-bottom: calc(68px + 68px + var(--safe-bottom) + 1rem);
       overflow: hidden;
     }
     .slide.edition-slide::before {
@@ -370,13 +371,13 @@
       position: absolute;
       left: 1.15rem;
       right: 1.15rem;
-      /* clear iOS Safari chrome: safe-area + extra lift */
-      bottom: calc(1.35rem + var(--safe-bottom) + 10px);
+      /* Clear iPhone Safari URL/toolbar (not in safe-area) + home indicator */
+      bottom: calc(68px + var(--safe-bottom));
       z-index: 2;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 7px;
-      height: 72px;
+      height: 68px;
       pointer-events: none;
     }
     .edition-thumb {
