@@ -225,11 +225,11 @@
 
     .hero-logo {
       display: block;
-      width: 100%;
-      max-width: 100%;
+      width: 88%;
+      max-width: 88%;
       height: auto;
       margin: 0.35rem 0 1.1rem;
-      align-self: stretch;
+      align-self: flex-start;
       pointer-events: none;
       user-select: none;
       -webkit-user-select: none;
@@ -554,7 +554,7 @@
     }
 
     .odo.spinning .odo-reel {
-      transition: transform 3.4s cubic-bezier(0.35, 0.0, 0.15, 1);
+      transition: transform 2.6s cubic-bezier(0.35, 0.0, 0.15, 1);
     }
     .odo.landed {
       animation: odoLandPulse 720ms ease-out;
@@ -952,14 +952,14 @@
     .map-pin {
       position: absolute;
       left: 50%;
-      top: 48%;
-      z-index: 3;
-      width: 36px;
-      height: 46px;
+      top: 50%;
+      z-index: 4;
+      width: 40px;
+      height: 50px;
       transform: translate(-50%, -160%);
       opacity: 0;
       pointer-events: none;
-      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.45));
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
     }
     .slide.active.place-slide .map-pin {
       animation: pinDrop 700ms cubic-bezier(0.22, 1, 0.36, 1) 120ms forwards;
@@ -972,14 +972,14 @@
     .pin-halo {
       position: absolute;
       left: 50%;
-      top: 48%;
+      top: 50%;
       width: 18px;
       height: 18px;
       margin: -9px 0 0 -9px;
       border-radius: 50%;
       border: 1.5px solid rgba(200, 240, 0, 0.55);
       pointer-events: none;
-      z-index: 2;
+      z-index: 3;
       opacity: 0;
     }
     .slide.active.place-slide .pin-halo {
@@ -1167,6 +1167,12 @@
         <div class="loc-block">
           <div class="map-card">
             <img class="map-static" src="assets/esmil-parcayacu-pin.jpg" alt="Mapa: ESMIL · Parcayacu, Quito" width="1200" height="900" decoding="async" />
+            <div class="pin-halo" aria-hidden="true"></div>
+            <div class="pin-halo h2" aria-hidden="true"></div>
+            <div class="map-pin" aria-hidden="true">
+              <div class="pin-body"></div>
+              <div class="pin-hole"></div>
+            </div>
           </div>
           <div class="loc-meta anim-loc">
             <p class="fact-label">Dirección</p>
@@ -1375,7 +1381,7 @@
         odos.forEach(function (odo) { odo.classList.remove("landed"); });
         var HOLD = 380;
         var STAGGER = 220;
-        var FALL = 3400;
+        var FALL = 2600;
         distHoldTimer = setTimeout(function () {
           distHoldTimer = null;
           odos.forEach(function (odo, idx) {
