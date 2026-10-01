@@ -130,14 +130,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Edition slide only — pre-roulette whole-slide enter (394e920) */
-    .slide.active.enter-slideIn {
-      animation: slideIn var(--snap) ease-out both;
-    }
-    @keyframes slideIn {
-      from { opacity: 0.85; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
 
     .progress.latido .progress-seg.done .fill {
       animation: latidoBar 520ms ease-out;
@@ -169,34 +161,35 @@
        use inline form-back instead (same prev action). */
     .stories.form-active .nav-back { display: none !important; }
 
-    .form-back-row {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      margin-bottom: 0.55rem;
-    }
-
     .form-back {
-      flex: 0 0 auto;
-      width: 36px;
-      height: 36px;
+      position: absolute;
+      bottom: calc(1rem + var(--safe-bottom));
+      left: 1rem;
+      z-index: 36;
+      width: 44px;
+      height: 44px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 50%;
       background: var(--surface);
       color: var(--text);
-      font-size: 1.2rem;
+      font-size: 1.35rem;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       -webkit-tap-highlight-color: transparent;
       transition: transform var(--snap), background var(--snap);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
     }
+
+    .stories.form-active .form-back { display: flex; }
 
     .form-back:active { transform: scale(0.94); background: var(--surface-2); }
 
-    .form-back-row .form-header-copy { flex: 1; min-width: 0; }
+    .slide.form-slide {
+      padding-bottom: calc(4.5rem + var(--safe-bottom));
+    }
 
     /* Ambient soft glow — not purple/orange full-bleed */
     .slide::before {
@@ -1003,6 +996,7 @@
     <div class="progress" id="progress" aria-hidden="true"></div>
 
     <button type="button" class="nav-back" id="nav-back" aria-label="Historia anterior">‹</button>
+    <button type="button" class="form-back" id="form-back" aria-label="Historia anterior">‹</button>
 
     <div class="tap-zones" id="tap-zones">
       <button type="button" class="tap-left" id="tap-left" aria-label="Anterior"></button>
@@ -1036,10 +1030,10 @@
     <!-- 1 Edition -->
     <section class="slide edition-slide" data-i="1">
       <div class="slide-inner">
-        <p class="kicker">El evento</p>
-        <div class="lima-block">2ª edición</div>
-        <h2>Triatlón<br>intereclesial</h2>
-        <p class="lead">Un encuentro de iglesias, cuerpo y comunidad. Nos encantaría contar contigo.</p>
+        <p class="kicker reveal reveal-d1">El evento</p>
+        <div class="lima-block reveal reveal-d2">2ª edición</div>
+        <h2 class="reveal reveal-d3">Triatlón<br>intereclesial</h2>
+        <p class="lead reveal reveal-d4">Un encuentro de iglesias, cuerpo y comunidad. Nos encantaría contar contigo.</p>
       </div>
     </section>
 
@@ -1050,7 +1044,6 @@
         <h2>ESMIL (Parcayacu)</h2>
         <div class="loc-block">
           <div class="map-card" role="img" aria-label="Mapa de ESMIL (Parcayacu), Quito">
-            <div class="map-label"><span class="pulse" aria-hidden="true"></span> ESMIL (Parcayacu)</div>
             <svg class="map-art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
                 <linearGradient id="mapBg" x1="0" y1="0" x2="1" y2="1">
@@ -1103,9 +1096,8 @@
             </div>
           </div>
           <div class="loc-meta anim-loc">
-            <p class="fact-label">Ubicación</p>
-            <p class="addr">ESMIL (Parcayacu)</p>
-            <p class="addr-sub">Av. Manuel Córdova Galarza, vía Mitad del Mundo</p>
+            <p class="fact-label">Dirección</p>
+            <p class="addr">Av. Manuel Córdova Galarza, vía Mitad del Mundo</p>
           </div>
         </div>
       </div>
@@ -1195,13 +1187,8 @@
     <section class="slide form-slide" data-i="6" id="form-slide">
       <div class="slide-inner">
         <div class="form-header-meta">
-          <div class="form-back-row">
-            <button type="button" class="form-back" id="form-back" aria-label="Historia anterior">‹</button>
-            <div class="form-header-copy">
-              <p class="kicker">Último paso</p>
-              <p class="lead-sm">Preinscríbete y continúa por WhatsApp. Nos encantará acompañarte.</p>
-            </div>
-          </div>
+          <p class="kicker">Último paso</p>
+          <p class="lead-sm">Preinscríbete y continúa por WhatsApp. Nos encantará acompañarte.</p>
         </div>
         <div class="form-card">
           <h2>Preinscripción</h2>
@@ -1344,11 +1331,9 @@
       }
 
       function applyEnterAnim(slide) {
-        slide.classList.remove("enter-fade", "enter-up", "enter-soft", "enter-firm", "enter-slideIn");
+        slide.classList.remove("enter-fade", "enter-up", "enter-soft", "enter-firm");
         var cls;
-        if (slide.classList.contains("edition-slide")) {
-          cls = "enter-slideIn";
-        } else if (slide.classList.contains("hero-energy") || slide.classList.contains("when-slide") || slide.classList.contains("place-slide")) {
+        if (slide.classList.contains("hero-energy") || slide.classList.contains("edition-slide") || slide.classList.contains("when-slide") || slide.classList.contains("place-slide")) {
           cls = "enter-soft";
         } else if (slide.classList.contains("distances-slide")) {
           cls = "enter-fade";
@@ -1365,7 +1350,7 @@
       function goTo(i, fromUser) {
         if (i < 0 || i >= slides.length) return;
         var leaving = current;
-        slides[current].classList.remove("active", "enter-fade", "enter-up", "enter-soft", "enter-firm", "enter-slideIn");
+        slides[current].classList.remove("active", "enter-fade", "enter-up", "enter-soft", "enter-firm");
         current = i;
         slides[current].classList.add("active");
         applyEnterAnim(slides[current]);
