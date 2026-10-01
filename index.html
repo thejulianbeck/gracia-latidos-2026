@@ -399,42 +399,6 @@
       color: var(--muted);
     }
 
-    .prize-row {
-      display: flex;
-      gap: 0.5rem;
-      margin: 0.75rem 0 1rem;
-    }
-
-    .prize-badge {
-      flex: 1;
-      text-align: center;
-      background: var(--surface);
-      border-radius: 20px;
-      padding: 0.9rem 0.4rem;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .prize-badge .place {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--lima);
-      display: block;
-      line-height: 1;
-    }
-
-    .prize-badge .lbl {
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-top: 0.35rem;
-    }
-
-    .prize-badge:nth-child(1) .place { color: var(--lima); }
-    .prize-badge:nth-child(2) .place { color: var(--text); }
-    .prize-badge:nth-child(3) .place { color: var(--energy); }
 
     .cat-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
@@ -1050,26 +1014,9 @@
       </div>
     </section>
 
-    <!-- 6 Premios -->
-    <section class="slide" data-i="6">
-      <div class="slide-inner">
-        <p class="kicker">Premios</p>
-        <h2>Podio por<br>modalidad</h2>
-        <div class="prize-row" style="pointer-events:none">
-          <div class="prize-badge"><span class="place">1.º</span><span class="lbl">Lugar</span></div>
-          <div class="prize-badge"><span class="place">2.º</span><span class="lbl">Lugar</span></div>
-          <div class="prize-badge"><span class="place">3.º</span><span class="lbl">Lugar</span></div>
-        </div>
-        <div class="cat-pills" style="pointer-events:none">
-          <span class="pill"><span class="dot"></span>Masculino</span>
-          <span class="pill"><span class="dot"></span>Femenino</span>
-          <span class="pill energy"><span class="dot"></span>Relevo</span>
-        </div>
-      </div>
-    </section>
 
-    <!-- 7 Form -->
-    <section class="slide form-slide" data-i="7" id="form-slide">
+    <!-- 6 Form -->
+    <section class="slide form-slide" data-i="6" id="form-slide">
       <div class="slide-inner">
         <div class="form-header-meta">
           <p class="kicker">Último paso</p>
