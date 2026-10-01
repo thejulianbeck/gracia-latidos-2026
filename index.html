@@ -157,8 +157,8 @@
       pointer-events: auto;
     }
 
-    /* Form slide: floating back would cover kicker/lead — hide it;
-       use inline form-back instead (same prev action). */
+    /* Form slide: floating nav-back hidden (covers kicker/lead).
+       #form-back also hidden — prev via bottom-left tap zone + swipe. */
     .stories.form-active .nav-back { display: none !important; }
 
     .form-back {
@@ -183,7 +183,8 @@
       box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
     }
 
-    .stories.form-active .form-back { display: flex; }
+    /* Hidden on purpose: empty bottom-left + tap/swipe go prev (no lonely arrow) */
+    .stories.form-active .form-back { display: none !important; }
 
     .form-back:active { transform: scale(0.94); background: var(--surface-2); }
 
@@ -443,6 +444,12 @@
     }
 
     .fact-value.lima { color: var(--lima); }
+    .fact-value .cost-per {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-left: 0.2rem;
+    }
 
     .fact-sub {
       font-size: 0.88rem;
@@ -654,7 +661,16 @@
     .tap-left { width: 30%; }
     .tap-right { width: 70%; }
 
-    .stories.form-active .tap-zones { display: none; }
+    /* Form: keep invisible prev hit-zone in empty bottom-left; hide tap-right */
+    .stories.form-active .tap-zones {
+      display: flex;
+      top: auto;
+      bottom: 0;
+      height: calc(4.5rem + var(--safe-bottom));
+      z-index: 25;
+    }
+    .stories.form-active .tap-left { width: 42%; }
+    .stories.form-active .tap-right { display: none; }
 
     .nav-back {
       position: absolute;
@@ -678,7 +694,7 @@
     }
 
     .nav-back:active { transform: scale(0.94); background: var(--surface-2); }
-    /* floating nav-back hidden on form; inline #form-back used instead */
+    /* floating nav-back hidden on form; prev via tap-left strip + swipe */
 
     /* Form */
     .form-header-meta { margin-bottom: 0.85rem; }
@@ -1166,6 +1182,11 @@
       <div class="slide-inner">
         <p class="kicker reveal reveal-d1">Dónde</p>
         <div class="loc-block">
+          <div class="loc-meta anim-loc">
+            <p class="fact-label">Lugar</p>
+            <p class="addr">Escuela Militar Esmil · Parcayacu, Quito</p>
+            <p class="addr-sub">Av. Manuel Córdova Galarza, vía Mitad del Mundo</p>
+          </div>
           <div class="map-card">
             <img class="map-static" src="assets/esmil-parcayacu-pin.jpg" alt="Mapa: ESMIL · Parcayacu, Quito" width="1200" height="900" decoding="async" />
             <div class="pin-halo" aria-hidden="true"></div>
@@ -1174,10 +1195,6 @@
               <div class="pin-body"></div>
               <div class="pin-hole"></div>
             </div>
-          </div>
-          <div class="loc-meta anim-loc">
-            <p class="fact-label">Dirección</p>
-            <p class="addr">Av. Manuel Córdova Galarza, vía Mitad del Mundo</p>
           </div>
         </div>
       </div>
@@ -1198,7 +1215,7 @@
           </div>
           <div class="fact">
             <p class="fact-label">Costo</p>
-            <p class="fact-value"><span class="big-num" style="font-size:1.8rem">$30</span></p>
+            <p class="fact-value"><span class="big-num" style="font-size:1.8rem">$30</span> <span class="cost-per">por inscripción</span></p>
             <p class="fact-sub">El pago se coordina por WhatsApp (transferencia).</p>
           </div>
         </div>
