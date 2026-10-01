@@ -313,9 +313,16 @@
 
     /* Edition Mood Spec — full-bleed B/N hero + 3-thumb strip */
     .slide.edition-slide {
-      /* strip height + Safari toolbar (~68px) + home-indicator safe-area + margin */
-      padding-bottom: calc(68px + 68px + var(--safe-bottom) + 1rem);
+      /* Flex column: text/kicker up top; strip near bottom clear of Safari chrome */
+      display: none;
+      flex-direction: column;
+      justify-content: flex-start;
+      /* Safari URL/toolbar (~68px+) + home-indicator; keep thumbs fully visible */
+      padding-bottom: calc(68px + var(--safe-bottom) + 0.75rem);
       overflow: hidden;
+    }
+    .slide.edition-slide.active {
+      display: flex;
     }
     .slide.edition-slide::before {
       opacity: 0.3;
@@ -361,30 +368,32 @@
     .slide.edition-slide .slide-inner {
       position: relative;
       z-index: 1;
-      justify-content: flex-end;
-      padding-bottom: 0.55rem;
+      flex: 0 0 auto;
+      justify-content: flex-start;
+      padding-top: 0.35rem;
+      padding-bottom: 0;
+      min-height: 0;
     }
     .slide.edition-slide .lead {
       color: rgba(255, 255, 255, 0.88);
       max-width: 22rem;
     }
     .edition-strip {
-      position: absolute;
-      left: 1.15rem;
-      right: 1.15rem;
-      /* Clear iPhone Safari URL/toolbar (not in safe-area) + home indicator */
-      bottom: calc(68px + var(--safe-bottom));
+      position: relative;
       z-index: 2;
+      flex: 0 0 auto;
+      width: 100%;
+      margin-top: auto;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 7px;
-      height: 68px;
       pointer-events: none;
     }
     .edition-thumb {
       display: block;
       width: 100%;
-      height: 100%;
+      aspect-ratio: 1 / 1;
+      height: auto;
       object-fit: cover;
       border-radius: 13px;
       opacity: 0;
@@ -1166,7 +1175,7 @@
       <div class="slide-inner">
         <p class="kicker reveal reveal-d1">El evento</p>
         <div class="lima-block reveal reveal-d2">2ª edición</div>
-        <p class="lead reveal reveal-d4">Familiar, en contexto de iglesia.</p>
+        <p class="lead reveal reveal-d4">La primera vez fue espectacular, esta vez será todavía mejor.</p>
       </div>
       <div class="edition-strip" aria-label="Momentos Gracia Latidos">
         <img class="edition-thumb" src="assets/edition-swim.jpg" alt="Natación" width="480" height="320" decoding="async" />
