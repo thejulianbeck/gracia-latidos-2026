@@ -1,0 +1,9 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "deploy-firebase.sh"],
+    "rewrites": [
+      { "source": "/invitacion-2026", "destination": "/invitacion-2026/index.html" }
+    ]
+  }
+}
