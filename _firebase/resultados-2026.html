@@ -91,6 +91,20 @@ footer a{color:var(--muted)}
 .vs .g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .vs .v{font-family:"Plus Jakarta Sans";font-weight:800;font-size:18px}
 .vs .d{margin-top:10px;font-weight:800;font-size:15px}
+.teams{display:grid;gap:10px}
+.team{background:var(--card);border-radius:24px;padding:14px 16px}
+.team .th{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.team .tn{font-family:"Plus Jakarta Sans";font-weight:800;font-size:18px;display:flex;align-items:center;gap:10px}
+.team .tp{font-family:"Plus Jakarta Sans";font-weight:800;font-size:15px;background:var(--lime);color:#0F1110;border-radius:999px;min-width:30px;height:30px;display:inline-grid;place-items:center;padding:0 8px}
+.team .tp.o{background:var(--card2);color:var(--muted)}
+.team .tt{text-align:right}
+.leg{display:grid;grid-template-columns:96px 1fr auto;gap:8px;align-items:center;padding:7px 0;border-top:1px solid rgba(255,255,255,.05);font-size:14px}
+.pill{font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--card2);color:var(--text);white-space:nowrap;justify-self:start}
+.pill.miss{background:transparent;border:1px dashed #3a3f3b;color:var(--muted)}
+.leg .who{font-weight:600;line-height:1.3}
+.leg .lt{font-family:"Plus Jakarta Sans";font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+.inc{color:var(--muted);font-size:12px;margin-top:8px}
+.team.hl{outline:2px solid var(--lime)}
 .up{color:#34D27A}.down{color:#FF5A4E}.mut{color:var(--muted)}
 </style>
 </head>
@@ -118,6 +132,9 @@ footer a{color:var(--muted)}
     <div class="list" id="fin"></div>
     <h2 id="othH">Inscritos</h2>
     <div class="list" id="oth"></div>
+    <div class="teams" id="teams"></div>
+    <h2 id="nteH" hidden>Sin equipo aún</h2>
+    <div class="list" id="nte" hidden></div>
     <p class="note" id="note"></p>
   </section>
 
@@ -155,6 +172,22 @@ const gapF = s => { const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60;
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 
+// Relevos 2026: filas tal cual del CSV de Ops (equipo, integrante, tramo). Composición y tramos faltantes se derivan aquí.
+const REL = [["1", "Abner Bravo", "natación"], ["1", "Matías Bravo", "ciclismo"], ["1", "Paola Flores", "carrera"], ["2", "Paulina Cevallos", "natación"], ["2", "Esteban Salvador", "carrera"], ["2", "Fernando Salvador", "ciclismo"], ["3", "Emilia Chilla", "natación"], ["3", "Felipe Quinteros", "ciclismo"], ["3", "Felipe Quinteros", "carrera"], ["4", "Ariana Arcos", "carrera"], ["4", "Tito Arcos", "natación"], ["4", "Patricia León", "ciclismo"], ["5", "Carlos Escalante", "ciclismo"], ["5", "Charlie Escalante", "carrera"], ["5", "Hady Escalante", "natación"], ["6", "Gianna Salazar", "ciclismo"], ["6", "Gianna Salazar", "carrera"], ["6", "Mary De Luna", "natación"], ["7", "Felipe Araujo", "natación"], ["7", "Josué Freire", "carrera"], ["7", "Tomás León", "ciclismo"], ["8", "Yolanda Flores", "ciclismo"], ["8", "Carolina Henríquez", "carrera"], ["8", "Gabriela Ojeda", "natación"], ["9", "Fabiana Jara", "natación"], ["9", "Amelia Jara", "carrera"], ["9", "Paula Villacreces", "ciclismo"], ["10", "Juan Carlos Sáenz", "natación"], ["10", "Ramiro Sáenz", "carrera"], ["10", "José Andrés Sáenz", "ciclismo"], ["10", "Emma Sáenz", "carrera"], ["11", "Vielka Carrera", "ciclismo"], ["11", "Vielka Carrera", "carrera"], ["11", "Andrés Pizarro", "natación"], ["12", "Lissette Palomeque", "natación"], ["12", "Juliana Pinargote", "ciclismo"], ["12", "Norbelis Camargo", "carrera"], ["13", "Diogo Moreira", "ciclismo"], ["13", "Diogo Moreira", "carrera"], ["14", "Paulette Cacuango", "natación"], ["14", "Samuel Delgado", "carrera"], ["14", "Doménica Panta", "ciclismo"], ["15", "Paola Sánchez", "carrera"], ["15", "Dayana Erazo", "ciclismo"], ["16", "Verónica Armendáriz", "ciclismo"], ["16", "Verónica Armendáriz", "carrera"], ["16", "Jorge Vásquez", "natación"], ["18", "Elías Cabrera", "natación"], ["18", "Fernando Cabrera", "ciclismo"], ["18", "Fernando Cabrera", "carrera"], ["19", "Carlos Jara Correa", "natación"], ["19", "Carlos Jara Correa", "ciclismo"], ["19", "Jahaira Acosta", "carrera"]];
+const LEGS = [['natación','🏊','Natación'],['ciclismo','🚴','Ciclismo'],['carrera','🏃','Carrera']];
+const TEAMS = [], NOTEAM = [];
+REL.forEach(([e,n,t]) => {
+  if (!/^\d+$/.test(e)) { if (!NOTEAM.includes(n)) NOTEAM.push(n); return; }
+  let T = TEAMS.find(x => x.n === +e); if (!T) TEAMS.push(T = {n:+e, legs:{}});
+  (T.legs[t] = T.legs[t] || []).push(n);
+});
+TEAMS.sort((a,b) => a.n - b.n).forEach(T => {
+  T.members = [...new Set(LEGS.flatMap(([k]) => T.legs[k] || []))];
+  T.missing = LEGS.filter(([k]) => !T.legs[k]).map(([,,l]) => l);
+  T.ok = !T.missing.length;
+});
+const MISS = {'Natación':'nadador','Ciclismo':'ciclista','Carrera':'corredor'};
+
 // Regla vs. 2025: confianza alta + misma categoría + final válido con tiempo real. Si no, igual que corredor nuevo.
 const CAT = {m:'masculino', f:'femenino', r:'relevo'};
 const validT = t => /^\d{1,2}:\d{2}:\d{2}$/.test(t || '') && sec(t) > 0;
@@ -164,12 +197,16 @@ ROWS.forEach(r => { r.v = (r.conf === 'alta' && r.c25 === CAT[r.c] && validT(r.t
 if (DEMO) {
   let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
   ROWS.forEach(r => {
-    if (r.c === 'r') return;                       // relevos: sin equipos aún, siguen pendientes
+    if (r.c === 'r') return;                       // relevos: por equipos (abajo)
     let s;
     if (r.v === 'cmp') s = sec(r.t25) + Math.round((rnd() - 0.6) * 600);   // ±, mayoría mejora
     else s = (r.c === 'm' ? 3900 : 4800) + Math.round(rnd() * 2700);
     r.t26 = p2(Math.floor(s/3600)) + ':' + p2(Math.floor(s%3600/60)) + ':' + p2(s%60);
   });
+  TEAMS.forEach(T => { if (!T.ok) return;
+    T.lt = {'natación': 540 + Math.round(rnd()*540), 'ciclismo': 1800 + Math.round(rnd()*900), 'carrera': 1200 + Math.round(rnd()*900)};
+    T.tot = T.lt['natación'] + T.lt['ciclismo'] + T.lt['carrera']; });
+  TEAMS.filter(T => T.ok).sort((a,b) => a.tot - b.tot).forEach((T,i,a) => { T.pos = i + 1; T.gap = T.tot - a[0].tot; });
   $('demoBanner').hidden = false;
   $('subTxt').textContent = 'Vista DEMO con tiempos inventados para probar la página. Sin ?demo=1 solo se ven los inscritos reales.';
   document.title = 'DEMO · ' + document.title;
@@ -191,6 +228,10 @@ function rowHTML(r){
   return `<button class="row nb" data-i="${r.id}"><span class="pos">–</span><span class="name">${esc(r.n)}</span><span class="r"><span class="st P">Pendiente</span></span></button>`;
 }
 function render(){
+  const R = br === 'r';
+  ['podium','finH','fin','oth'].forEach(i => { if (R) $(i).style.display = 'none'; });
+  $('teams').style.display = R ? '' : 'none'; if (!R) { $('nteH').hidden = $('nte').hidden = true; }
+  if (R) { $('othH').style.display = ''; return renderTeams(); }
   const {fin, oth, total} = B[br];
   const q = norm($('q').value.trim());
   const m = r => !q || norm(r.n).includes(q);
@@ -207,6 +248,27 @@ function render(){
   $('note').textContent = br === 'r'
     ? 'Relevos: lista de inscritos individuales. Los equipos y tiempos se publicarán después de la carrera.'
     : (DEMO ? 'DEMO: posiciones y tiempos ficticios.' : 'Los dorsales y tiempos se publicarán después de la carrera.');
+}
+function teamHTML(T){
+  const legs = LEGS.map(([k,ic,l]) => {
+    const who = T.legs[k];
+    return `<div class="leg"><span class="pill${who ? '' : ' miss'}">${ic} ${l}</span><span class="who">${who ? who.map(esc).join(' y ') : '<span class="mut">Por asignar</span>'}</span><span class="lt">${who && T.lt ? hms(T.lt[k]) : ''}</span></div>`;
+  }).join('');
+  const right = T.pos ? `<div class="time">${hms(T.tot)}</div><div class="gap">${T.gap ? gapF(T.gap) : 'Ganador'}</div>`
+    : T.ok ? '<span class="st P">Pendiente</span>' : '<span class="st DNS">Incompleto</span>';
+  const inc = T.ok ? '' : `<div class="inc">Falta ${T.missing.map(l => MISS[l]).join(' y ')}</div>`;
+  return `<div class="team" id="equipo-${T.n}"><div class="th"><span class="tn"><span class="tp${T.pos ? '' : ' o'}">${T.pos || '–'}</span>Equipo ${T.n}${DEMO && T.pos ? '<span class="demo-tag">DEMO</span>' : ''}</span><span class="tt">${right}</span></div>${legs}${inc}</div>`;
+}
+function renderTeams(){
+  const q = norm($('q').value.trim());
+  const L = TEAMS.filter(T => !q || T.members.some(n => norm(n).includes(q)) || norm('equipo ' + T.n) === q)
+    .sort((a,b) => (a.pos || 1e9) - (b.pos || 1e9) || a.n - b.n);
+  $('teams').innerHTML = L.map(teamHTML).join('') || '<div class="empty">Sin coincidencias</div>';
+  const nt = NOTEAM.filter(n => !q || norm(n).includes(q));
+  $('nteH').hidden = $('nte').hidden = !nt.length;
+  $('nte').innerHTML = nt.map(n => `<div class="row nb"><span class="pos">–</span><span class="name">${esc(n)}</span><span class="r"><span class="st P">Sin equipo</span></span></div>`).join('');
+  $('othH').textContent = `Equipos (${TEAMS.length})`;
+  $('note').textContent = DEMO ? 'DEMO: tiempos por tramo ficticios. Los equipos incompletos no entran en la clasificación.' : 'Los tiempos de cada tramo se publicarán después de la carrera.';
 }
 function setBranch(k){
   br = k; document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x.dataset.t === k)); render();
@@ -226,7 +288,10 @@ function vsHTML(r){
 }
 document.addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) open(b.dataset.i, true); });
 function open(id, push){
-  const r = ROWS.find(x => x.id === id); if (!r) return; if (r.c !== br) setBranch(r.c); cur = r;
+  const r = ROWS.find(x => x.id === id); if (!r) return; if (r.c !== br) setBranch(r.c);
+  if (r.c === 'r') { const T = TEAMS.find(T => T.members.some(n => norm(n) === norm(r.n))); const el = T && $('equipo-' + T.n);
+    if (el) { el.classList.add('hl'); el.scrollIntoView({block:'center'}); } return; }
+  cur = r;
   $('sK').innerHTML = esc((r.t26 ? r.pos + 'º lugar · ' : 'Inscrito · ') + LABEL[r.c] + ' 2026') + (DEMO ? '<span class="demo-tag">DEMO</span>' : '');
   $('sName').textContent = r.n;
   const st = [['Categoría', LABEL[r.c]]];
