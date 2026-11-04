@@ -104,7 +104,9 @@ footer a{color:var(--muted)}
 .leg .who{font-weight:600;line-height:1.3}
 .leg .lt{font-family:"Plus Jakarta Sans";font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
 .inc{color:var(--muted);font-size:12px;margin-top:8px}
-.team.hl{outline:2px solid var(--lime)}
+.hl{outline:2px solid var(--lime);outline-offset:-2px;animation:hlfade 3.6s linear forwards}
+@keyframes hlfade{0%,83.3%{outline-color:var(--lime)}100%{outline-color:transparent}}
+.pod .fn{font-size:12px;color:var(--muted);line-height:1.35;margin:6px 0}
 .pod .av{display:flex;justify-content:center;margin:8px 0 6px}
 .pod .av i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--card2);border:2px solid var(--card);margin-left:-7px;display:grid;place-items:center;font:800 10px Inter,sans-serif;color:var(--text)}
 .pod .av i:first-child{margin-left:0}
@@ -272,18 +274,21 @@ function teamHTML(T){
   const inc = '';
   return `<div class="team" id="equipo-${T.n}"><div class="th"><span class="tn"><span class="tp${T.pos ? '' : ' o'}">${T.pos || '–'}</span>Equipo ${T.n}${DEMO && T.pos ? '<span class="demo-tag">DEMO</span>' : ''}</span><span class="tt">${right}</span></div>${legs}${inc}</div>`;
 }
-const PODIO = DEMO ? ({a:'a',b:'b',c:'c'})[new URLSearchParams(location.search).get('podio')] || '' : '';
+const PODIO = DEMO ? ({a:'a',b:'b',c:'c',d:'d'})[new URLSearchParams(location.search).get('podio')] || '' : '';
 const first = n => n.split(' ')[0];
+function flash(el){ if (!el) return; el.classList.remove('hl'); void el.offsetWidth; el.classList.add('hl');
+  clearTimeout(el._hl); el._hl = setTimeout(() => el.classList.remove('hl'), 3600); }
 const ini = n => { const w = n.split(' '); return (w[0][0] + (w.length > 1 ? w[w.length-1][0] : '')).toUpperCase(); };
 function podHTML(T){
   let mid = '';
   if (PODIO === 'a') mid = `<div class="av">${T.members.map(n => `<i title="${esc(n)}">${ini(n)}</i>`).join('')}</div><div class="mem">${T.members.map(esc).join('<br>')}</div>`;
   if (PODIO === 'b') mid = `<div class="lg">${LEGS.map(([k,ic]) => `<div><b>${ic}</b>${T.legs[k] ? T.legs[k].map(n => esc(first(n))).join('/') : '—'}</div>`).join('')}</div>`;
+  if (PODIO === 'd') mid = `<div class="fn">${T.members.map(n => esc(first(n))).join(' · ')}</div>`;
   return `<button class="pod p${T.pos}" data-pod="${T.n}"><div class="medal">${T.pos}º</div><div class="nm" style="min-height:0">Equipo ${T.n}</div>${mid}<div class="tm">${hms(T.tot)}</div><div class="db">DEMO</div>${PODIO === 'a' ? '<div class="tap">Toca para ver</div>' : ''}</button>`;
 }
 document.addEventListener('click', e => { const b = e.target.closest('[data-pod]'); if (!b) return;
   if (PODIO === 'a') b.classList.toggle('open');
-  else { const el = $('equipo-' + b.dataset.pod); el.classList.add('hl'); el.scrollIntoView({block:'center', behavior:'smooth'}); } });
+  else { const el = $('equipo-' + b.dataset.pod); el.scrollIntoView({block:'center', behavior:'smooth'}); flash(el); } });
 function renderTeams(){
   const pl = $('pline'); if (pl) pl.remove();
   const q = norm($('q').value.trim());
@@ -322,8 +327,8 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-i]')
 function open(id, push){
   const r = ROWS.find(x => x.id === id); if (!r) return; if (r.c !== br) setBranch(r.c);
   if (r.c === 'r') { const T = TEAMS.find(T => T.members.some(n => norm(n) === norm(r.n))); const el = T && $('equipo-' + T.n);
-    if (el) { el.classList.add('hl'); el.scrollIntoView({block:'center'}); } return; }
-  cur = r;
+    if (el) { el.scrollIntoView({block:'center'}); flash(el); } return; }
+  cur = r; flash(document.querySelector(`.row[data-i="${id}"]`));
   $('sK').innerHTML = esc((r.t26 ? r.pos + 'º lugar · ' : 'Inscrito · ') + LABEL[r.c] + ' 2026') + (DEMO ? '<span class="demo-tag">DEMO</span>' : '');
   $('sName').textContent = r.n;
   const st = [['Categoría', LABEL[r.c]]];
