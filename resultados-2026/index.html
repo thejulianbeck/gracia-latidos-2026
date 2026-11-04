@@ -151,6 +151,7 @@ const sec = t => t.split(':').reduce((a,v) => a*60 + +v, 0);
 const p2 = n => String(n).padStart(2,'0');
 const hms = s => { const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return h ? h+':'+p2(m)+':'+p2(x) : m+':'+p2(x); };
 const fmt = t => hms(sec(t));
+const dur = s => { const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return (h ? h+' h ' : '') + m+' min '+x+' s'; };
 const gapF = s => { const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return '+' + (h ? h+':'+p2(m)+':'+p2(x) : p2(m)+':'+p2(x)); };
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -215,7 +216,7 @@ function vsHTML(r){
   if (r.v !== 'cmp') return '';
   let d = '<div class="d mut">2026 pendiente</div>';
   if (r.t26) { const x = sec(r.t26) - sec(r.t25);
-    d = x < 0 ? `<div class="d up">Mejoró ${hms(-x)}</div>` : x > 0 ? `<div class="d down">${hms(x)} más lento</div>` : '<div class="d mut">Mismo tiempo</div>'; }
+    d = x < 0 ? `<div class="d up">${dur(-x)} más rápido que en 2025</div>` : x > 0 ? `<div class="d down">${dur(x)} más lento que en 2025</div>` : '<div class="d mut">Mismo tiempo</div>'; }
   return `<div class="vs"><div class="k">vs. 2025${DEMO ? '<span class="demo-tag">DEMO</span>' : ''}</div><div class="g">
     <div><div class="k">2025</div><div class="v">${fmt(r.t25)}</div></div>
     <div><div class="k">2026</div><div class="v">${r.t26 ? fmt(r.t26) : 'Pendiente'}</div></div></div>${d}</div>`;
