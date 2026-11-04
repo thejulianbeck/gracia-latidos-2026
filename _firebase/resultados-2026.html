@@ -105,6 +105,20 @@ footer a{color:var(--muted)}
 .leg .lt{font-family:"Plus Jakarta Sans";font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
 .inc{color:var(--muted);font-size:12px;margin-top:8px}
 .team.hl{outline:2px solid var(--lime)}
+.pod .av{display:flex;justify-content:center;margin:8px 0 6px}
+.pod .av i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--card2);border:2px solid var(--card);margin-left:-7px;display:grid;place-items:center;font:800 10px Inter,sans-serif;color:var(--text)}
+.pod .av i:first-child{margin-left:0}
+.pod.p1 .av i{background:rgba(200,240,0,.22)}
+.pod .mem{display:none;font-size:11px;color:var(--muted);line-height:1.35;margin:4px 0 6px}
+.pod.open .mem{display:block}.pod.open .av{display:none}
+.pod .tap{font-size:10px;color:var(--muted);margin-top:4px}
+.pod .lg{display:grid;gap:3px;margin:8px 0}
+.pod .lg div{font-size:11px;line-height:1.2;color:var(--text);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .lg b{font-size:14px;margin-right:2px}
+.pline{background:var(--card);border-radius:20px;padding:10px 14px;margin:-10px 0 22px}
+.pline div{font-size:13px;line-height:1.35;padding:6px 0;border-top:1px solid rgba(255,255,255,.05)}
+.pline div:first-child{border-top:0}
+.pline b{font-family:"Plus Jakarta Sans";font-weight:800;margin-right:6px}
 .up{color:#34D27A}.down{color:#FF5A4E}.mut{color:var(--muted)}
 </style>
 </head>
@@ -227,7 +241,7 @@ function rowHTML(r){
   return `<button class="row nb" data-i="${r.id}"><span class="pos">–</span><span class="name">${esc(r.n)}</span><span class="r"><span class="st P">Pendiente</span></span></button>`;
 }
 function render(){
-  const R = br === 'r';
+  const R = br === 'r'; if (!R && $('pline')) $('pline').remove();
   ['podium','finH','fin','oth'].forEach(i => { if (R) $(i).style.display = 'none'; });
   $('teams').style.display = R ? '' : 'none'; if (!R) { $('nteH').hidden = $('nte').hidden = true; }
   if (R) { $('othH').style.display = ''; return renderTeams(); }
@@ -258,10 +272,29 @@ function teamHTML(T){
   const inc = '';
   return `<div class="team" id="equipo-${T.n}"><div class="th"><span class="tn"><span class="tp${T.pos ? '' : ' o'}">${T.pos || '–'}</span>Equipo ${T.n}${DEMO && T.pos ? '<span class="demo-tag">DEMO</span>' : ''}</span><span class="tt">${right}</span></div>${legs}${inc}</div>`;
 }
+const PODIO = DEMO ? ({a:'a',b:'b',c:'c'})[new URLSearchParams(location.search).get('podio')] || '' : '';
+const first = n => n.split(' ')[0];
+const ini = n => { const w = n.split(' '); return (w[0][0] + (w.length > 1 ? w[w.length-1][0] : '')).toUpperCase(); };
+function podHTML(T){
+  let mid = '';
+  if (PODIO === 'a') mid = `<div class="av">${T.members.map(n => `<i title="${esc(n)}">${ini(n)}</i>`).join('')}</div><div class="mem">${T.members.map(esc).join('<br>')}</div>`;
+  if (PODIO === 'b') mid = `<div class="lg">${LEGS.map(([k,ic]) => `<div><b>${ic}</b>${T.legs[k] ? T.legs[k].map(n => esc(first(n))).join('/') : '—'}</div>`).join('')}</div>`;
+  return `<button class="pod p${T.pos}" data-pod="${T.n}"><div class="medal">${T.pos}º</div><div class="nm" style="min-height:0">Equipo ${T.n}</div>${mid}<div class="tm">${hms(T.tot)}</div><div class="db">DEMO</div>${PODIO === 'a' ? '<div class="tap">Toca para ver</div>' : ''}</button>`;
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-pod]'); if (!b) return;
+  if (PODIO === 'a') b.classList.toggle('open');
+  else { const el = $('equipo-' + b.dataset.pod); el.classList.add('hl'); el.scrollIntoView({block:'center', behavior:'smooth'}); } });
 function renderTeams(){
+  const pl = $('pline'); if (pl) pl.remove();
   const q = norm($('q').value.trim());
   const L = TEAMS.filter(T => !q || T.members.some(n => norm(n).includes(q)) || norm('equipo ' + T.n) === q)
     .sort((a,b) => (a.pos || 1e9) - (b.pos || 1e9) || a.n - b.n);
+  const P = DEMO && !q && PODIO ? TEAMS.filter(T => T.pos && T.pos <= 3).sort((a,b) => a.pos - b.pos) : [];
+  if (P.length === 3) {
+    $('podium').style.display = '';
+    $('podium').innerHTML = [1,0,2].map(i => podHTML(P[i])).join('');
+    if (PODIO === 'c') $('podium').insertAdjacentHTML('afterend', '<div class="pline" id="pline">' + P.map(T => `<div><b>${T.pos}º Equipo ${T.n}</b>${T.members.map(esc).join(', ')}</div>`).join('') + '</div>');
+  }
   $('teams').innerHTML = L.map(teamHTML).join('') || '<div class="empty">Sin coincidencias</div>';
   const nt = NOTEAM.filter(n => !q || norm(n).includes(q));
   $('nteH').hidden = $('nte').hidden = !nt.length;
