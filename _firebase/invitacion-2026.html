@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#0F1110" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Gracia Latidos 2026 — 2ª edición. Triatlón con miembros de iglesia. 14 de noviembre de 2026, Quito." />
+  <title>Gracia Latidos 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0F1110;
+      --surface: #1A1D1B;
+      --surface-2: #222624;
+      --text: #FFFFFF;
+      --muted: #8B918C;
+      --lima: #C8F000;
+      --lima-deep: #B6F500;
+      --energy: #FF6B2C;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --radius: 24px;
+      --snap: 200ms;
+      --font: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      background: var(--bg);
+      font-family: var(--font);
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    .stories {
+      position: fixed;
+      inset: 0;
+      max-width: 430px;
+      margin: 0 auto;
+      height: 100%;
+      height: 100dvh;
+      background: var(--bg);
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Progress */
+    .progress {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 40;
+      display: flex;
+      gap: 4px;
+      padding: calc(10px + var(--safe-top)) 12px 0;
+      pointer-events: none;
+    }
+
+    .progress-seg {
+      flex: 1;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+    }
+
+    .progress-seg .fill {
+      height: 100%;
+      width: 0%;
+      background: var(--lima);
+      border-radius: 2px;
+    }
+
+    .progress-seg.done .fill { width: 100%; }
+
+    /* Slides */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      padding: calc(40px + var(--safe-top)) 1.35rem calc(1.4rem + var(--safe-bottom));
+      background: var(--bg);
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    .slide.active.enter-fade {
+      animation: enterFade 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .slide.active.enter-up {
+      animation: enterUp 780ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .slide.active.enter-soft {
+      animation: enterSoft 900ms cubic-bezier(0.25, 0.1, 0.25, 1) both;
+    }
+    .slide.active.enter-firm {
+      animation: enterFirm 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes enterFade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes enterUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes enterSoft {
+      from { opacity: 0; transform: translateY(10px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes enterFirm {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    .progress.latido .progress-seg.done .fill {
+      animation: latidoBar 520ms ease-out;
+    }
+    @keyframes latidoBar {
+      0% { filter: brightness(1); box-shadow: none; }
+      40% { filter: brightness(1.35); box-shadow: 0 0 10px rgba(200, 240, 0, 0.55); }
+      100% { filter: brightness(1); box-shadow: none; }
+    }
+
+    .slide-inner {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      pointer-events: none;
+    }
+
+    .slide.form-slide .slide-inner {
+      justify-content: flex-start;
+      padding-top: 0.35rem;
+      pointer-events: auto;
+    }
+
+    /* Form slide: the left third of the tap zone navigates back. */
+    .stories.form-active .nav-back { display: none !important; }
+
+    .slide.form-slide {
+      padding-bottom: calc(4.5rem + var(--safe-bottom));
+    }
+
+    /* Ambient soft glow — not purple/orange full-bleed */
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 40% at 80% -10%, rgba(200, 240, 0, 0.08), transparent 50%),
+        radial-gradient(ellipse 50% 35% at 0% 100%, rgba(255, 107, 44, 0.06), transparent 45%);
+      pointer-events: none;
+    }
+
+    .slide.hero-energy::before {
+      background:
+        radial-gradient(ellipse 90% 55% at 50% 0%, rgba(200, 240, 0, 0.16), transparent 55%),
+        radial-gradient(ellipse 40% 30% at 100% 90%, rgba(255, 107, 44, 0.1), transparent 50%);
+      animation: glowBreathe 5.2s ease-in-out infinite;
+    }
+    @keyframes glowBreathe {
+      0%, 100% { opacity: 0.75; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(12px); }
+    .slide.active .reveal { animation: revealIn 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .slide.active .reveal-d1 { animation-delay: 80ms; }
+    .slide.active .reveal-d2 { animation-delay: 200ms; }
+    .slide.active .reveal-d3 { animation-delay: 320ms; }
+    .slide.active .reveal-d4 { animation-delay: 450ms; }
+    .slide.active .reveal-d5 { animation-delay: 580ms; }
+    .slide.active .reveal-d6 { animation-delay: 700ms; }
+    @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
+
+    .hero-logo {
+      display: block;
+      width: 88%;
+      max-width: 88%;
+      height: auto;
+      margin: 0.35rem 0 1.1rem;
+      align-self: flex-start;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .slide.grain::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.07;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 160px 160px;
+      mix-blend-mode: overlay;
+    }
+
+    .kicker {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lima);
+      margin-bottom: 0.75rem;
+    }
+
+    .slide h1 {
+      font-size: clamp(2rem, 8vw, 2.55rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      margin-bottom: 0.85rem;
+    }
+
+    .slide h2 {
+      font-size: clamp(1.65rem, 6.5vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      margin-bottom: 0.7rem;
+    }
+
+    .lead {
+      font-size: 1.02rem;
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--muted);
+      max-width: 18em;
+    }
+
+    .lead strong { color: var(--text); font-weight: 600; }
+
+    .badge-pill {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--lima);
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .lima-block {
+      display: inline-block;
+      background: var(--lima);
+      color: var(--bg);
+      font-weight: 800;
+      font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      padding: 0.55rem 0.85rem;
+      border-radius: 14px;
+      margin: 0.35rem 0 1rem;
+    }
+
+
+    /* Edition Mood Spec — full-bleed B/N hero + 3-thumb strip */
+    .slide.edition-slide {
+      /* Flex column: text/kicker up top; strip near bottom clear of Safari chrome */
+      display: none;
+      flex-direction: column;
+      justify-content: flex-start;
+      /* Safari URL/toolbar (~68px+) + home-indicator; keep thumbs fully visible */
+      padding-bottom: calc(68px + var(--safe-bottom) + 0.75rem);
+      overflow: hidden;
+    }
+    .slide.edition-slide.active {
+      display: flex;
+    }
+    .slide.edition-slide::before {
+      opacity: 0.3;
+      background:
+        radial-gradient(ellipse 70% 40% at 20% 10%, rgba(200, 240, 0, 0.06), transparent 50%);
+    }
+    .edition-hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .edition-hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 28% 22%;
+      /* already B/N asset; keep light grayscale for consistency */
+      filter: grayscale(1) contrast(1.05);
+      opacity: 0;
+      transform: scale(1.03);
+      will-change: transform, opacity;
+    }
+    .slide.active.edition-slide .edition-hero-bg img {
+      animation: editionHeroIn 460ms ease-out forwards;
+    }
+    @keyframes editionHeroIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+    .edition-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(15, 17, 16, 0.28) 0%,
+        rgba(15, 17, 16, 0.48) 32%,
+        rgba(15, 17, 16, 0.82) 68%,
+        #0F1110 100%
+      );
+      pointer-events: none;
+    }
+    .slide.edition-slide .slide-inner {
+      position: relative;
+      z-index: 1;
+      flex: 0 0 auto;
+      justify-content: flex-start;
+      padding-top: 0.35rem;
+      padding-bottom: 0;
+      min-height: 0;
+    }
+    .slide.edition-slide .lead {
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 22rem;
+    }
+    .slide.edition-slide > .lead {
+      position: relative;
+      z-index: 1;
+      margin: auto 0 0.75rem;
+    }
+    .edition-strip {
+      position: relative;
+      z-index: 2;
+      flex: 0 0 auto;
+      width: 100%;
+      margin-top: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 7px;
+      pointer-events: none;
+    }
+    .edition-thumb {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      height: auto;
+      object-fit: cover;
+      border-radius: 13px;
+      opacity: 0;
+      transform: translateY(10px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
+    .slide.active.edition-slide .edition-thumb {
+      animation: editionThumbIn 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .slide.active.edition-slide .edition-thumb:nth-child(1) { animation-delay: 140ms; }
+    .slide.active.edition-slide .edition-thumb:nth-child(2) { animation-delay: 230ms; }
+    .slide.active.edition-slide .edition-thumb:nth-child(3) { animation-delay: 320ms; }
+    @keyframes editionThumbIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.15rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .card + .card { margin-top: 0.7rem; }
+
+    .fact-stack { display: flex; flex-direction: column; gap: 0.7rem; }
+
+    .fact {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      border: none;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+    .slide.active.when-slide .fact {
+      opacity: 0;
+      animation: revealIn 680ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .slide.active.when-slide .fact:nth-child(1) { animation-delay: 120ms; }
+    .slide.active.when-slide .fact:nth-child(2) { animation-delay: 260ms; }
+    .slide.active.when-slide .fact:nth-child(3) { animation-delay: 400ms; }
+
+    .fact-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .fact-value {
+      font-size: clamp(1.25rem, 5vw, 1.55rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: var(--text);
+    }
+
+    .fact-value.lima { color: var(--lima); }
+    .fact-value .cost-per {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-left: 0.2rem;
+    }
+
+    .fact-sub {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      font-weight: 400;
+    }
+
+    .big-num {
+      font-size: clamp(2.6rem, 12vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .big-num .unit {
+      font-size: 0.4em;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+      margin-left: 0.15em;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin: 0.85rem 0 0.35rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .pill .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--lima);
+      flex-shrink: 0;
+    }
+
+    .pill.energy .dot { background: var(--energy); }
+
+    .dist-grid {
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 0.4rem;
+    }
+
+    .dist-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      border: none;
+      box-shadow: inset 0 0 0 1px rgba(200, 240, 0, 0.06);
+    }
+
+    .dist-card .label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .dist-card .num {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--lima);
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.15em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .odo {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.12em;
+    }
+
+    .odo-window {
+      display: inline-block;
+      height: 1.15em;
+      overflow: hidden;
+      line-height: 1.15;
+      vertical-align: baseline;
+    }
+
+    .odo-reel {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+      transition: none;
+    }
+
+    .odo.spinning .odo-reel {
+      transition: transform 2.6s cubic-bezier(0.35, 0.0, 0.15, 1);
+    }
+    .odo.landed {
+      animation: odoLandPulse 720ms ease-out;
+    }
+    @keyframes odoLandPulse {
+      0% { filter: brightness(1); text-shadow: none; }
+      35% { filter: brightness(1.25); text-shadow: 0 0 16px rgba(200, 240, 0, 0.55); }
+      100% { filter: brightness(1); text-shadow: none; }
+    }
+
+    .odo-val {
+      height: 1.15em;
+      line-height: 1.15;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    .odo-unit {
+      font-size: 0.55em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .modality-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.35rem; }
+
+    .modality-item {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    .slide.active .modality-item {
+      animation: modCascade 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .slide.active .modality-item:nth-child(1) { animation-delay: 100ms; }
+    .slide.active .modality-item:nth-child(2) { animation-delay: 250ms; }
+    .slide.active .modality-item:nth-child(3) { animation-delay: 400ms; }
+    @keyframes modCascade {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modality-item strong {
+      display: block;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .modality-item span {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+
+    .cat-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    .hint-tap {
+      position: absolute;
+      bottom: calc(1.25rem + var(--safe-bottom));
+      left: 0; right: 0;
+      z-index: 5;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      pointer-events: none;
+      transition: opacity var(--snap);
+    }
+
+    .hint-tap.hidden { opacity: 0; }
+
+    .tap-zones {
+      position: absolute;
+      top: calc(28px + var(--safe-top));
+      left: 0;
+      right: 0;
+      bottom: calc(72px + var(--safe-bottom));
+      z-index: 20;
+      display: flex;
+    }
+
+    .tap-left, .tap-right {
+      height: 100%;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .tap-left { width: 30%; }
+    .tap-right { width: 70%; }
+
+    /* Form: use the left third for prev, while the card stays fully interactive. */
+    .stories.form-active .tap-zones {
+      top: calc(28px + var(--safe-top));
+      bottom: calc(72px + var(--safe-bottom));
+      /* The slide owns the surface; the root click handler keeps the edge active. */
+      z-index: 0;
+      pointer-events: none;
+    }
+    .stories.form-active .tap-left { width: 33.333%; }
+    .stories.form-active .tap-right { display: none; }
+
+    .nav-back {
+      position: absolute;
+      top: calc(28px + var(--safe-top));
+      left: 10px;
+      z-index: 35;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform var(--snap), background var(--snap);
+    }
+
+    .nav-back:active { transform: scale(0.94); background: var(--surface-2); }
+    /* floating nav-back hidden on form; prev via tap-left strip + swipe */
+
+    /* Form */
+    .form-header-meta { margin-bottom: 0.85rem; }
+    .form-header-meta .lead-sm {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .form-card {
+      position: relative;
+      z-index: 1;
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 28px;
+      padding: 1.25rem 1.15rem 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      pointer-events: auto;
+    }
+
+    .form-card h2 {
+      color: var(--text);
+      font-size: 1.35rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .form-intro {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .field { margin-bottom: 0.75rem; }
+
+    .field label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 0.78rem 0.85rem;
+      font-size: 1rem;
+      font-family: inherit;
+      font-weight: 500;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color var(--snap), box-shadow var(--snap);
+    }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C8F000' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      background-color: var(--bg);
+      padding-right: 2.1rem;
+    }
+
+    .field input::placeholder { color: #5a605c; }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--lima);
+      box-shadow: 0 0 0 3px rgba(200, 240, 0, 0.18);
+    }
+
+    .error-msg {
+      display: none;
+      font-size: 0.8rem;
+      color: var(--energy);
+      margin-bottom: 0.6rem;
+    }
+
+    .error-msg.visible { display: block; }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      width: 100%;
+      padding: 0.95rem 1.1rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform var(--snap), opacity var(--snap), background var(--snap);
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-lima {
+      background: linear-gradient(180deg, var(--lima) 0%, var(--lima-deep) 100%);
+      color: var(--bg);
+      box-shadow: 0 4px 20px rgba(200, 240, 0, 0.22);
+    }
+
+    .slide.active.form-slide .btn-lima.cta-enter {
+      animation: ctaScaleIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 280ms both;
+    }
+    .slide.active.form-slide .btn-whatsapp.cta-enter {
+      animation: ctaScaleIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 1000ms both;
+    }
+    @keyframes ctaScaleIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .btn-lima:active {
+      background: var(--lima-deep);
+    }
+
+    .btn-whatsapp {
+      background: #1f2a22;
+      color: var(--text);
+      border: 1px solid rgba(37, 211, 102, 0.45);
+      margin-top: 0.6rem;
+    }
+
+    .btn-whatsapp svg {
+      width: 20px;
+      height: 20px;
+      fill: #25D366;
+      flex-shrink: 0;
+    }
+
+    .btn-whatsapp.hidden { display: none; }
+
+    .btn-whatsapp.primary-wa {
+      background: #25D366;
+      color: #062510;
+      border: none;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-whatsapp.primary-wa svg { fill: #062510; }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 0.35rem 0 0;
+    }
+
+    .form-success.visible { display: block; }
+
+    .form-success p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .form-success strong { color: var(--lima); }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+  
+    /* Location — static branded map (no live tiles) */
+    .slide.place-slide {
+      padding-bottom: calc(5.75rem + var(--safe-bottom));
+    }
+
+    .slide.place-slide .slide-inner {
+      justify-content: flex-start;
+      padding-top: 0;
+      gap: 0.45rem;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .slide.place-slide h2 {
+      font-size: clamp(1.25rem, 5vw, 1.55rem);
+      margin-bottom: 0;
+      line-height: 1.15;
+    }
+
+    .slide.place-slide .kicker {
+      margin-bottom: 0.2rem;
+    }
+
+    .loc-block {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+      pointer-events: none;
+    }
+
+    .map-card {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 240px;
+      height: min(52vh, 400px);
+      max-height: 58vh;
+      background: #121514;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .map-static {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0;
+      transform: scale(1.03);
+    }
+    .slide.active.place-slide .map-static {
+      animation: mapStaticIn 520ms ease-out forwards;
+    }
+    @keyframes mapStaticIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .map-label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.42rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(15, 17, 16, 0.9);
+      border: 1px solid rgba(200, 240, 0, 0.4);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      pointer-events: none;
+    }
+
+    .map-label .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #C8F000;
+      box-shadow: 0 0 0 0 rgba(200, 240, 0, 0.5);
+      animation: pinPulse 1.8s ease-out infinite;
+    }
+
+    @keyframes pinPulse {
+      0% { box-shadow: 0 0 0 0 rgba(200, 240, 0, 0.45); }
+      70% { box-shadow: 0 0 0 8px rgba(200, 240, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(200, 240, 0, 0); }
+    }
+
+    .map-pin {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 4;
+      width: 40px;
+      height: 50px;
+      transform: translate(-50%, -160%);
+      opacity: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+    }
+    .slide.active.place-slide .map-pin {
+      animation: pinDrop 700ms cubic-bezier(0.22, 1, 0.36, 1) 120ms forwards;
+    }
+    @keyframes pinDrop {
+      0% { opacity: 0; transform: translate(-50%, -220%); }
+      70% { opacity: 1; transform: translate(-50%, -96%); }
+      100% { opacity: 1; transform: translate(-50%, -100%); }
+    }
+    .pin-halo {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      margin: -9px 0 0 -9px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(200, 240, 0, 0.55);
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0;
+    }
+    .slide.active.place-slide .pin-halo {
+      animation: haloRing 1.8s ease-out 720ms infinite;
+    }
+    .slide.active.place-slide .pin-halo.h2 { animation-delay: 1.15s; }
+    @keyframes haloRing {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(4.2); }
+    }
+    .loc-meta.anim-loc {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .slide.active.place-slide .loc-meta.anim-loc {
+      animation: revealIn 600ms cubic-bezier(0.22, 1, 0.36, 1) 780ms forwards;
+    }
+    .maps-actions .maps-btn {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    .stories.place-active .maps-actions .maps-btn {
+      animation: revealIn 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .stories.place-active .maps-actions .maps-btn:nth-child(1) { animation-delay: 900ms; }
+    .stories.place-active .maps-actions .maps-btn:nth-child(2) { animation-delay: 1020ms; }
+
+    .map-pin .pin-body {
+      width: 26px;
+      height: 26px;
+      margin: 0 auto;
+      border-radius: 50% 50% 50% 0;
+      background: #C8F000;
+      transform: rotate(-45deg);
+      box-shadow: 0 0 0 5px rgba(200, 240, 0, 0.22);
+    }
+
+    .map-pin .pin-hole {
+      position: absolute;
+      top: 9px;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      margin-left: -5px;
+      border-radius: 50%;
+      background: #0F1110;
+    }
+
+    .loc-meta {
+      flex: 0 0 auto;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 0.7rem 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .loc-meta .fact-label { margin-bottom: 0.15rem; }
+
+    .loc-meta .addr {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .loc-meta .addr-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+      line-height: 1.3;
+    }
+
+    .maps-actions {
+      position: absolute;
+      left: 1.15rem;
+      right: 1.15rem;
+      bottom: calc(0.75rem + var(--safe-bottom));
+      z-index: 30;
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .stories.place-active .maps-actions {
+      display: grid;
+    }
+
+    .maps-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      padding: 0.78rem 0.45rem;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1.15;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 200ms, background 200ms, opacity 200ms;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .maps-btn:active { transform: scale(0.97); }
+
+    .maps-btn-lima {
+      color: var(--bg);
+      background: linear-gradient(180deg, #C8F000 0%, #B6F500 100%);
+      box-shadow: 0 4px 16px rgba(200, 240, 0, 0.2);
+    }
+
+    .maps-btn-ghost {
+      color: var(--text);
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.28);
+    }
+
+    .maps-btn-ghost:active {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="stories" id="stories" role="application" aria-label="Historias Gracia Latidos 2026">
+    <div class="progress" id="progress" aria-hidden="true"></div>
+
+    <button type="button" class="nav-back" id="nav-back" aria-label="Historia anterior">‹</button>
+
+    <div class="tap-zones" id="tap-zones">
+      <button type="button" class="tap-left" id="tap-left" aria-label="Anterior"></button>
+      <button type="button" class="tap-right" id="tap-right" aria-label="Siguiente"></button>
+    </div>
+
+    <div class="maps-actions" id="maps-actions" aria-label="Abrir ubicación">
+      <a class="maps-btn maps-btn-lima" id="btn-gmaps"
+         href="https://maps.app.goo.gl/gf9HxvA1a44WKHuq5"
+         target="_blank" rel="noopener noreferrer">Abrir en Google Maps</a>
+      <a class="maps-btn maps-btn-ghost" id="btn-waze"
+         href="https://waze.com/ul?q=Escuela%20Superior%20Militar%20Eloy%20Alfaro%2C%20Av.%20Manuel%20C%C3%B3rdova%20Galarza%2C%20Quito"
+         target="_blank" rel="noopener noreferrer">Abrir en Waze</a>
+    </div>
+
+    <!-- 0 Intro -->
+    <section class="slide hero-energy active" data-i="0">
+      <div class="slide-inner">
+        <span class="badge-pill reveal reveal-d1">Invitación especial</span>
+        <img class="hero-logo reveal reveal-d2" src="../assets/logo-gracia-latidos-white.png" alt="Gracia Latidos 2026" width="400" height="68" decoding="async" />
+        <p class="lead reveal reveal-d4">Una invitación personal<br>para nadar, pedalear y correr juntos<br>con un mismo corazón.</p>
+        <div class="pills reveal reveal-d5" style="pointer-events:none">
+          <span class="pill"><span class="dot"></span>Triatlón</span>
+          <span class="pill"><span class="dot"></span>Ambiente familiar</span>
+          <span class="pill energy"><span class="dot"></span>Contexto de iglesia</span>
+        </div>
+      </div>
+      <p class="hint-tap" id="hint-tap">Toca para continuar</p>
+    </section>
+
+    <!-- 1 Edition — Mood Spec photo layout -->
+    <section class="slide edition-slide" data-i="1">
+      <div class="edition-hero-bg" aria-hidden="true">
+        <img src="../assets/edition-hero.jpg" alt="" width="1080" height="1440" decoding="async" />
+        <div class="edition-scrim"></div>
+      </div>
+      <div class="slide-inner">
+        <p class="kicker reveal reveal-d1">El evento</p>
+        <div class="lima-block reveal reveal-d2">2ª edición</div>
+      </div>
+      <p class="lead reveal reveal-d4">La primera vez fue espectacular,<br>esta vez será todavía mejor</p>
+      <div class="edition-strip" aria-label="Momentos Gracia Latidos">
+        <img class="edition-thumb" src="../assets/edition-swim.jpg" alt="Natación" width="480" height="320" decoding="async" />
+        <img class="edition-thumb" src="../assets/edition-arch.jpg" alt="Arco de meta" width="480" height="320" decoding="async" />
+        <img class="edition-thumb" src="../assets/edition-community.jpg" alt="Comunidad" width="480" height="320" decoding="async" />
+      </div>
+    </section>
+
+    <!-- 2 Place — approved static map asset -->
+    <section class="slide grain place-slide" data-i="2">
+      <div class="slide-inner">
+        <p class="kicker reveal reveal-d1">Dónde</p>
+        <div class="loc-block">
+          <div class="loc-meta anim-loc">
+            <p class="fact-label">Lugar</p>
+            <p class="addr">Escuela Superior Militar “Eloy Alfaro”<br>Parcayacu, Quito</p>
+            <p class="addr-sub">Av. Manuel Córdova Galarza, vía Mitad del Mundo</p>
+          </div>
+          <div class="map-card">
+            <img class="map-static" src="../assets/esmil-parcayacu-pin.jpg" alt="Mapa: ESMIL · Parcayacu, Quito" width="1280" height="1550" decoding="async" />
+            <div class="pin-halo" aria-hidden="true"></div>
+            <div class="pin-halo h2" aria-hidden="true"></div>
+            <div class="map-pin" aria-hidden="true">
+              <div class="pin-body"></div>
+              <div class="pin-hole"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 Date / fee / close -->
+    <section class="slide when-slide" data-i="3">
+      <div class="slide-inner">
+        <p class="kicker">Datos importantes</p>
+        <div class="fact-stack">
+          <div class="fact">
+            <p class="fact-label">Fecha del evento</p>
+            <p class="fact-value lima">14 de noviembre de 2026</p>
+          </div>
+          <div class="fact">
+            <p class="fact-label">Cierre de inscripciones</p>
+            <p class="fact-value">23 de octubre de 2026</p>
+          </div>
+          <div class="fact">
+            <p class="fact-label">Costo</p>
+            <p class="fact-value"><span class="big-num" style="font-size:1.8rem">$30</span> <span class="cost-per">por inscripción</span></p>
+            <p class="fact-sub">El pago se coordina por WhatsApp (transferencia).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Distances -->
+    <section class="slide distances-slide" data-i="4" id="distances-slide">
+      <div class="slide-inner">
+        <p class="kicker">Distancias</p>
+        <h2>Tres tramos.<br>Un latido.</h2>
+        <div class="pills" style="pointer-events:none">
+          <span class="pill"><span class="dot"></span>Natación</span>
+          <span class="pill energy"><span class="dot"></span>Ciclismo</span>
+          <span class="pill"><span class="dot"></span>Carrera</span>
+        </div>
+        <div class="dist-grid" id="dist-grid">
+          <div class="dist-card">
+            <span class="label">Natación</span>
+            <span class="num odo" data-steps="1500,1350,1200,1050,900,750,600,500,400,320,250" data-unit="m" aria-label="250 m">
+              <span class="odo-window"><span class="odo-reel"></span></span>
+              <span class="odo-unit">m</span>
+            </span>
+          </div>
+          <div class="dist-card">
+            <span class="label">Ciclismo</span>
+            <span class="num odo" data-steps="40,36,32,28,24,20,17,14,12,10" data-unit="km" aria-label="10 km">
+              <span class="odo-window"><span class="odo-reel"></span></span>
+              <span class="odo-unit">km</span>
+            </span>
+          </div>
+          <div class="dist-card">
+            <span class="label">Carrera</span>
+            <span class="num odo" data-steps="10,9.5,9,8.5,8,7.5,7,6.5,6,5.5,5" data-unit="km" aria-label="5 km">
+              <span class="odo-window"><span class="odo-reel"></span></span>
+              <span class="odo-unit">km</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 Modalidades -->
+    <section class="slide" data-i="5">
+      <div class="slide-inner">
+        <p class="kicker">Modalidades</p>
+        <div class="modality-list">
+          <div class="modality-item">
+            <strong>Triatlón masculino</strong>
+            <span>250 m · 10 km · 5 km</span>
+          </div>
+          <div class="modality-item">
+            <strong>Triatlón femenino</strong>
+            <span>Mismas distancias</span>
+          </div>
+          <div class="modality-item">
+            <strong>Relevos</strong>
+            <span>Equipos de 2 o 3; cada uno elige su tramo</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 6 Form -->
+    <section class="slide form-slide" data-i="6" id="form-slide">
+      <div class="slide-inner">
+        <div class="form-header-meta">
+          <p class="kicker">Último paso</p>
+          <p class="lead-sm">Preinscríbete y continúa por WhatsApp.<br>Nos encantará acompañarte.</p>
+        </div>
+        <div class="form-card">
+          <h2>Preinscripción</h2>
+          <p class="form-intro">Completa tus datos.<br>El pago se coordina en el chat.</p>
+          <form id="invite-form" novalidate>
+            <div class="field">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" autocomplete="given-name" required placeholder="Tu nombre" />
+            </div>
+            <div class="field">
+              <label for="apellido">Apellido</label>
+              <input type="text" id="apellido" name="apellido" autocomplete="family-name" required placeholder="Tu apellido" />
+            </div>
+            <div class="field">
+              <label for="disciplina">Disciplina</label>
+              <select id="disciplina" name="disciplina" required>
+                <option value="" disabled selected>Elige una opción</option>
+                <option value="Triatlón masculino">Triatlón masculino</option>
+                <option value="Triatlón femenino">Triatlón femenino</option>
+                <option value="Relevos">Relevos</option>
+              </select>
+            </div>
+            <p class="error-msg" id="form-error" role="alert">Por favor, completa nombre, apellido y disciplina.</p>
+            <button type="submit" class="btn btn-lima cta-enter" id="submit-btn">Enviar preinscripción</button>
+          </form>
+          <div class="form-success" id="form-success">
+            <p>¡Listo, <strong id="success-name"></strong>!</p>
+            <p>Continúa por WhatsApp para el siguiente paso.</p>
+            <a class="btn btn-whatsapp primary-wa hidden" id="wa-continuar" href="#" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Continuar
+            </a>
+          </div>
+          <a class="btn btn-whatsapp cta-enter" id="wa-direct" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 6.045L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Comunicarme por WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      var WA_BASE = "https://wa.me/593963510138?text=";
+      var PHRASE = "Hola, estoy interesado en el triatlón Gracia Latidos. ¿Cuál es el siguiente paso?";
+      var root = document.getElementById("stories");
+      var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+      var progressEl = document.getElementById("progress");
+      var hint = document.getElementById("hint-tap");
+      var current = 0;
+      var touchStartX = 0;
+      var touchStartY = 0;
+      var touchStartedInFormCard = false;
+
+      slides.forEach(function () {
+        var seg = document.createElement("div");
+        seg.className = "progress-seg";
+        seg.innerHTML = '<div class="fill"></div>';
+        progressEl.appendChild(seg);
+      });
+      var segs = Array.prototype.slice.call(progressEl.querySelectorAll(".progress-seg"));
+
+      function isForm(i) {
+        return slides[i].classList.contains("form-slide");
+      }
+
+      function updateProgress() {
+        segs.forEach(function (seg, i) {
+          seg.classList.remove("done", "active", "paused");
+          var fill = seg.querySelector(".fill");
+          fill.style.animation = "none";
+          if (i <= current) {
+            seg.classList.add("done");
+          }
+        });
+      }
+
+      /* Distances number-roulette (Olympic → Latidos) */
+      var distHoldTimer = null;
+      var odos = Array.prototype.slice.call(document.querySelectorAll(".odo"));
+
+      function buildOdoReel(odo) {
+        var reel = odo.querySelector(".odo-reel");
+        var steps = odo.getAttribute("data-steps").split(",");
+        reel.innerHTML = steps.map(function (n) {
+          return '<span class="odo-val">' + n.trim() + "</span>";
+        }).join("");
+        reel.style.transform = "translate3d(0,0,0)";
+        odo.classList.remove("spinning");
+      }
+
+      odos.forEach(buildOdoReel);
+
+      function resetDistRoulette() {
+        if (distHoldTimer) {
+          clearTimeout(distHoldTimer);
+          distHoldTimer = null;
+        }
+        odos.forEach(function (odo) {
+          odo.classList.remove("spinning", "landed");
+          var reel = odo.querySelector(".odo-reel");
+          reel.style.transition = "none";
+          reel.style.transform = "translate3d(0,0,0)";
+          void reel.offsetWidth;
+          reel.style.transition = "";
+        });
+      }
+
+      function playDistRoulette() {
+        resetDistRoulette();
+        odos.forEach(function (odo) { odo.classList.remove("landed"); });
+        var HOLD = 380;
+        var STAGGER = 220;
+        var FALL = 2600;
+        distHoldTimer = setTimeout(function () {
+          distHoldTimer = null;
+          odos.forEach(function (odo, idx) {
+            var reel = odo.querySelector(".odo-reel");
+            var steps = odo.getAttribute("data-steps").split(",");
+            var line = reel.querySelector(".odo-val");
+            var lineH = line ? line.offsetHeight : reel.offsetHeight / steps.length;
+            var target = -lineH * (steps.length - 1);
+            setTimeout(function () {
+              odo.classList.add("spinning");
+              reel.style.transform = "translate3d(0," + target + "px,0)";
+              setTimeout(function () { odo.classList.add("landed"); }, FALL);
+            }, idx * STAGGER);
+          });
+        }, HOLD);
+      }
+
+      var enterCycle = ["enter-soft", "enter-up", "enter-fade", "enter-firm"];
+      var enterIdx = 0;
+
+      function pulseProgress() {
+        progressEl.classList.remove("latido");
+        void progressEl.offsetWidth;
+        progressEl.classList.add("latido");
+        setTimeout(function () { progressEl.classList.remove("latido"); }, 560);
+      }
+
+      function applyEnterAnim(slide) {
+        slide.classList.remove("enter-fade", "enter-up", "enter-soft", "enter-firm");
+        var cls;
+        if (slide.classList.contains("hero-energy") || slide.classList.contains("edition-slide") || slide.classList.contains("when-slide") || slide.classList.contains("place-slide")) {
+          cls = "enter-soft";
+        } else if (slide.classList.contains("distances-slide")) {
+          cls = "enter-fade";
+        } else if (slide.classList.contains("form-slide")) {
+          cls = "enter-firm";
+        } else {
+          cls = enterCycle[enterIdx % enterCycle.length];
+          enterIdx++;
+        }
+        void slide.offsetWidth;
+        slide.classList.add(cls);
+      }
+
+      function goTo(i, fromUser) {
+        if (i < 0 || i >= slides.length) return;
+        var leaving = current;
+        slides[current].classList.remove("active", "enter-fade", "enter-up", "enter-soft", "enter-firm");
+        current = i;
+        slides[current].classList.add("active");
+        applyEnterAnim(slides[current]);
+        root.classList.toggle("form-active", isForm(current));
+        root.classList.toggle("place-active", slides[current].classList.contains("place-slide"));
+        if (hint && fromUser) hint.classList.add("hidden");
+        if (hint && current === 0 && !fromUser) hint.classList.remove("hidden");
+        updateProgress();
+        if (leaving !== current) pulseProgress();
+        if (isForm(current)) {
+          slides[current].scrollTop = 0;
+        }
+        var onDist = slides[current].classList.contains("distances-slide");
+        var wasDist = slides[leaving].classList.contains("distances-slide");
+        if (!onDist && wasDist) resetDistRoulette();
+        if (onDist) playDistRoulette();
+      }
+
+      function next(fromUser) {
+        if (current >= slides.length - 1) return;
+        goTo(current + 1, fromUser);
+      }
+
+      function prev(fromUser) {
+        if (current <= 0) return;
+        goTo(current - 1, fromUser);
+      }
+
+
+      document.getElementById("tap-left").addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        prev(true);
+      });
+
+      document.getElementById("tap-right").addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        next(true);
+      });
+
+      /* On the form, the card must win hit-testing; keep the left third active outside it. */
+      root.addEventListener("click", function (e) {
+        if (!isForm(current) || e.target.closest(".form-card") || e.target.closest(".maps-actions") || e.target.closest(".tap-zones")) return;
+        var rect = root.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX < rect.left + rect.width / 3) {
+          e.preventDefault();
+          prev(true);
+        }
+      });
+
+      document.getElementById("nav-back").addEventListener("click", function (e) {
+        e.preventDefault();
+        prev(true);
+      });
+
+      root.addEventListener("touchstart", function (e) {
+        touchStartedInFormCard = isForm(current) && !!e.target.closest(".form-card");
+        if (touchStartedInFormCard || e.target.closest(".maps-actions")) return;
+        var t = e.changedTouches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+      }, { passive: true });
+
+      root.addEventListener("touchend", function (e) {
+        var startedInFormCard = touchStartedInFormCard;
+        touchStartedInFormCard = false;
+        if (startedInFormCard || (isForm(current) && e.target.closest(".form-card")) || e.target.closest(".maps-actions")) return;
+        var t = e.changedTouches[0];
+        var dx = t.clientX - touchStartX;
+        var dy = t.clientY - touchStartY;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+          if (dx < 0) next(true);
+          else prev(true);
+        }
+      }, { passive: true });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight" || e.key === " ") {
+          e.preventDefault();
+          next(true);
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          prev(true);
+        }
+      });
+
+
+      function buildMessage(nombre, apellido, disciplina) {
+        var parts = [PHRASE];
+        if (nombre || apellido) {
+          parts.push("\n\nNombre: " + (nombre || "").trim() + " " + (apellido || "").trim());
+        }
+        if (disciplina) {
+          parts.push("\nDisciplina: " + disciplina);
+        }
+        return parts.join("");
+      }
+
+      function waUrl(msg) {
+        return WA_BASE + encodeURIComponent(msg);
+      }
+
+      document.getElementById("wa-direct").href = waUrl(PHRASE);
+
+      var form = document.getElementById("invite-form");
+      var errEl = document.getElementById("form-error");
+      var successEl = document.getElementById("form-success");
+      var waContinuar = document.getElementById("wa-continuar");
+      var submitBtn = document.getElementById("submit-btn");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var nombre = document.getElementById("nombre").value.trim();
+        var apellido = document.getElementById("apellido").value.trim();
+        var disciplina = document.getElementById("disciplina").value;
+
+        if (!nombre || !apellido || !disciplina) {
+          errEl.classList.add("visible");
+          return;
+        }
+        errEl.classList.remove("visible");
+
+        waContinuar.href = waUrl(buildMessage(nombre, apellido, disciplina));
+        document.getElementById("success-name").textContent = nombre;
+        successEl.classList.add("visible");
+        waContinuar.classList.remove("hidden");
+        submitBtn.style.display = "none";
+        document.getElementById("wa-direct").style.display = "none";
+
+        Array.prototype.forEach.call(form.querySelectorAll("input, select"), function (el) {
+          el.disabled = true;
+        });
+
+        successEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+
+      goTo(0, false);
+    })();
+  </script>
+</body>
+</html>
