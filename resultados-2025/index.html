@@ -95,7 +95,6 @@ footer a{color:var(--muted)}
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" data-t="m" aria-selected="true">Masculino</button>
     <button class="tab" role="tab" data-t="f" aria-selected="false">Femenino</button>
-    <button class="tab" role="tab" data-t="r" aria-selected="false">Relevos</button>
   </div>
 
   <section id="pm">
@@ -108,8 +107,6 @@ footer a{color:var(--muted)}
     <div class="list" id="oth"></div>
     <p class="note">DQ: descalificado · DNS: no tomó la salida. Los tiempos de DQ no cuentan para la clasificación.</p>
   </section>
-  <section id="pf" hidden><div class="empty"><b>Resultados próximamente</b>Estamos preparando los resultados femeninos.</div></section>
-  <section id="pr" hidden><div class="empty"><b>Resultados próximamente</b>Estamos preparando los resultados de relevos.</div></section>
 
   <footer>Gracia Latidos · Edición 2025 · <a id="home2" href="../">Volver al inicio</a></footer>
 </div>
@@ -125,7 +122,8 @@ footer a{color:var(--muted)}
 <div class="toast" id="toast">Enlace copiado</div>
 
 <script>
-const ROWS = [{"pos": 1, "dorsal": 4, "nombre": "ANDRES PINTO", "estado": "Finished", "tiempo": "01:01:07"}, {"pos": 2, "dorsal": 32, "nombre": "ALBERTO CABRERA", "estado": "Finished", "tiempo": "01:03:30"}, {"pos": 3, "dorsal": 19, "nombre": "LUIS CACUANGO", "estado": "Finished", "tiempo": "01:07:37"}, {"pos": 4, "dorsal": 9, "nombre": "FERNANDO CABRERA", "estado": "Finished", "tiempo": "01:07:46"}, {"pos": 5, "dorsal": 38, "nombre": "JOSE CANO (NACHO)", "estado": "Finished", "tiempo": "01:08:24"}, {"pos": 6, "dorsal": 33, "nombre": "JONATHAN MONAR", "estado": "Finished", "tiempo": "01:10:35"}, {"pos": 7, "dorsal": 31, "nombre": "ALEXANDER JANETA", "estado": "Finished", "tiempo": "01:12:44"}, {"pos": 8, "dorsal": 20, "nombre": "JAVIER GARCIA", "estado": "Finished", "tiempo": "01:15:44"}, {"pos": 9, "dorsal": 16, "nombre": "HUGO GARCIA", "estado": "Finished", "tiempo": "01:15:45"}, {"pos": 10, "dorsal": 30, "nombre": "MATIAS JANETA", "estado": "Finished", "tiempo": "01:18:15"}, {"pos": 11, "dorsal": 21, "nombre": "PABLO ZAMBRANO", "estado": "Finished", "tiempo": "01:19:28"}, {"pos": 12, "dorsal": 8, "nombre": "CRISTIAN BECERRA", "estado": "Finished", "tiempo": "01:20:46"}, {"pos": 13, "dorsal": 36, "nombre": "JOSE DANIEL RUBIO", "estado": "Finished", "tiempo": "01:23:10"}, {"pos": 14, "dorsal": 18, "nombre": "DYLAN HERNANDEZ", "estado": "Finished", "tiempo": "01:24:36"}, {"pos": 15, "dorsal": 15, "nombre": "POL LOPEZ", "estado": "Finished", "tiempo": "01:25:47"}, {"pos": 16, "dorsal": 34, "nombre": "DIEGO ERAZO", "estado": "Finished", "tiempo": "01:26:14"}, {"pos": 17, "dorsal": 22, "nombre": "DARWIN SALAZAR", "estado": "Finished", "tiempo": "01:26:37"}, {"pos": 18, "dorsal": 14, "nombre": "JUAN CARLOS VILLACRECES", "estado": "Finished", "tiempo": "01:31:14"}, {"pos": 19, "dorsal": 17, "nombre": "ARBETH CARRION", "estado": "Finished", "tiempo": "01:35:56"}, {"pos": 20, "dorsal": 5, "nombre": "GABRIEL LLUMIQUINGA", "estado": "Finished", "tiempo": "01:40:00"}, {"pos": 21, "dorsal": 12, "nombre": "JULIAN BECERRA", "estado": "Finished", "tiempo": "01:40:50"}, {"pos": 22, "dorsal": 13, "nombre": "JOSE LUIS SALTOS", "estado": "Finished", "tiempo": "01:49:02"}, {"pos": null, "dorsal": 23, "nombre": "MAURICIO BALDEON", "estado": "DQ", "tiempo": "00:38:45"}, {"pos": null, "dorsal": 35, "nombre": "JUAN DIEGO CALDERON", "estado": "DQ", "tiempo": "00:47:52"}, {"pos": null, "dorsal": 1, "nombre": "FABIAN JARA", "estado": "DQ", "tiempo": "00:58:19"}, {"pos": null, "dorsal": 7, "nombre": "FERNANDO CISNEROS", "estado": "DQ", "tiempo": "01:00:43"}, {"pos": null, "dorsal": 6, "nombre": "LUIS VALENCIA", "estado": "DNS", "tiempo": "00:00:00"}, {"pos": null, "dorsal": 25, "nombre": "PABLO YACELGA", "estado": "DNS", "tiempo": "00:00:00"}, {"pos": null, "dorsal": 28, "nombre": "ROBERTO ACOSTA", "estado": "DNS", "tiempo": "00:00:00"}, {"pos": null, "dorsal": 37, "nombre": "BYRON LOPEZ", "estado": "DNS", "tiempo": "00:00:00"}];
+const DATA = {"m": [{"pos": 1, "dorsal": 4, "nombre": "ANDRES PINTO", "estado": "Finished", "tiempo": "01:01:07"}, {"pos": 2, "dorsal": 32, "nombre": "ALBERTO CABRERA", "estado": "Finished", "tiempo": "01:03:30"}, {"pos": 3, "dorsal": 19, "nombre": "LUIS CACUANGO", "estado": "Finished", "tiempo": "01:07:37"}, {"pos": 4, "dorsal": 9, "nombre": "FERNANDO CABRERA", "estado": "Finished", "tiempo": "01:07:46"}, {"pos": 5, "dorsal": 38, "nombre": "JOSE CANO (NACHO)", "estado": "Finished", "tiempo": "01:08:24"}, {"pos": 6, "dorsal": 33, "nombre": "JONATHAN MONAR", "estado": "Finished", "tiempo": "01:10:35"}, {"pos": 7, "dorsal": 31, "nombre": "ALEXANDER JANETA", "estado": "Finished", "tiempo": "01:12:44"}, {"pos": 8, "dorsal": 20, "nombre": "JAVIER GARCIA", "estado": "Finished", "tiempo": "01:15:44"}, {"pos": 9, "dorsal": 16, "nombre": "HUGO GARCIA", "estado": "Finished", "tiempo": "01:15:45"}, {"pos": 10, "dorsal": 30, "nombre": "MATIAS JANETA", "estado": "Finished", "tiempo": "01:18:15"}, {"pos": 11, "dorsal": 21, "nombre": "PABLO ZAMBRANO", "estado": "Finished", "tiempo": "01:19:28"}, {"pos": 12, "dorsal": 8, "nombre": "CRISTIAN BECERRA", "estado": "Finished", "tiempo": "01:20:46"}, {"pos": 13, "dorsal": 36, "nombre": "JOSE DANIEL RUBIO", "estado": "Finished", "tiempo": "01:23:10"}, {"pos": 14, "dorsal": 18, "nombre": "DYLAN HERNANDEZ", "estado": "Finished", "tiempo": "01:24:36"}, {"pos": 15, "dorsal": 15, "nombre": "POL LOPEZ", "estado": "Finished", "tiempo": "01:25:47"}, {"pos": 16, "dorsal": 34, "nombre": "DIEGO ERAZO", "estado": "Finished", "tiempo": "01:26:14"}, {"pos": 17, "dorsal": 22, "nombre": "DARWIN SALAZAR", "estado": "Finished", "tiempo": "01:26:37"}, {"pos": 18, "dorsal": 14, "nombre": "JUAN CARLOS VILLACRECES", "estado": "Finished", "tiempo": "01:31:14"}, {"pos": 19, "dorsal": 17, "nombre": "ARBETH CARRION", "estado": "Finished", "tiempo": "01:35:56"}, {"pos": 20, "dorsal": 5, "nombre": "GABRIEL LLUMIQUINGA", "estado": "Finished", "tiempo": "01:40:00"}, {"pos": 21, "dorsal": 12, "nombre": "JULIAN BECERRA", "estado": "Finished", "tiempo": "01:40:50"}, {"pos": 22, "dorsal": 13, "nombre": "JOSE LUIS SALTOS", "estado": "Finished", "tiempo": "01:49:02"}, {"pos": null, "dorsal": 23, "nombre": "MAURICIO BALDEON", "estado": "DQ", "tiempo": "00:38:45"}, {"pos": null, "dorsal": 35, "nombre": "JUAN DIEGO CALDERON", "estado": "DQ", "tiempo": "00:47:52"}, {"pos": null, "dorsal": 1, "nombre": "FABIAN JARA", "estado": "DQ", "tiempo": "00:58:19"}, {"pos": null, "dorsal": 7, "nombre": "FERNANDO CISNEROS", "estado": "DQ", "tiempo": "01:00:43"}, {"pos": null, "dorsal": 6, "nombre": "LUIS VALENCIA", "estado": "DNS", "tiempo": "00:00:00"}, {"pos": null, "dorsal": 25, "nombre": "PABLO YACELGA", "estado": "DNS", "tiempo": "00:00:00"}, {"pos": null, "dorsal": 28, "nombre": "ROBERTO ACOSTA", "estado": "DNS", "tiempo": "00:00:00"}, {"pos": null, "dorsal": 37, "nombre": "BYRON LOPEZ", "estado": "DNS", "tiempo": "00:00:00"}], "f": [{"pos": 1, "dorsal": 26, "nombre": "CAROL CERMEÑO", "estado": "Finished", "tiempo": "01:24:24"}, {"pos": 2, "dorsal": 11, "nombre": "MARIPAZ BECERRA", "estado": "Finished", "tiempo": "01:33:51"}, {"pos": 3, "dorsal": 29, "nombre": "SILVANIA SUAREZ", "estado": "Finished", "tiempo": "01:38:02"}, {"pos": 4, "dorsal": 48, "nombre": "JULIANA CALDERON", "estado": "Finished", "tiempo": "01:46:06"}, {"pos": 5, "dorsal": 2, "nombre": "MARIA FERNANDA VARELA", "estado": "Finished", "tiempo": "01:51:11"}, {"pos": 6, "dorsal": 10, "nombre": "JUANITA ESPIN", "estado": "Finished", "tiempo": "01:51:12"}, {"pos": null, "dorsal": 27, "nombre": "GUISSELA VEGA", "estado": "DQ", "tiempo": "00:17:07"}]};
+const LABEL = {m:"Masculino",f:"Femenino"};
 // Base dir works for /resultados-2025, /resultados-2025/ and GitHub Pages subpath
 const dir = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
 const root = new URL('../', location.origin + dir).href;
@@ -138,10 +136,16 @@ const sec = t => t.split(':').reduce((a,v) => a*60 + +v, 0);
 const fmt = t => t.replace(/^0(\d:)/,'$1').replace(/^0:/,'');            // 01:01:07 -> 1:01:07
 const gapF = s => { const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60, p=n=>String(n).padStart(2,'0');
   return '+' + (h ? h+':'+p(m)+':'+p(x) : p(m)+':'+p(x)); };
-const fin = ROWS.filter(r => r.estado === 'Finished').sort((a,b) => a.pos - b.pos);
-const oth = ROWS.filter(r => r.estado !== 'Finished').sort((a,b) => (a.estado > b.estado) - (a.estado < b.estado) || a.dorsal - b.dorsal);
-const lead = sec(fin[0].tiempo);
-fin.forEach(r => r.gap = sec(r.tiempo) - lead);
+const B = {};
+for (const k in DATA) {
+  const rows = DATA[k]; rows.forEach(r => r.br = k);
+  const fn = rows.filter(r => r.estado === 'Finished').sort((a,b) => a.pos - b.pos);
+  const ot = rows.filter(r => r.estado !== 'Finished').sort((a,b) => (a.estado > b.estado) - (a.estado < b.estado) || a.dorsal - b.dorsal);
+  const ld = sec(fn[0].tiempo); fn.forEach(r => r.gap = sec(r.tiempo) - ld);
+  B[k] = {fin: fn, oth: ot};
+}
+const ALL = DATA.m.concat(DATA.f);
+let br = 'm', fin = B.m.fin, oth = B.m.oth;
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function rowHTML(r){
@@ -161,16 +165,22 @@ function render(){
   $('oth').innerHTML = o.map(rowHTML).join('');
   $('oth').style.display = $('othH').style.display = o.length ? '' : 'none';
 }
-$('podium').innerHTML = [1,0,2].map(i => { const r = fin[i];
-  return `<button class="pod p${r.pos}" data-b="${r.dorsal}"><div class="medal">${r.pos}º</div><div class="nm">${esc(tc(r.nombre))}</div><div class="tm">${fmt(r.tiempo)}</div><div class="db">#${r.dorsal}</div></button>`; }).join('');
+function podium(){ $('podium').innerHTML = [1,0,2].filter(i => fin[i]).map(i => { const r = fin[i];
+  return `<button class="pod p${r.pos}" data-b="${r.dorsal}"><div class="medal">${r.pos}º</div><div class="nm">${esc(tc(r.nombre))}</div><div class="tm">${fmt(r.tiempo)}</div><div class="db">#${r.dorsal}</div></button>`; }).join(''); }
+function setBranch(k){
+  br = k; fin = B[k].fin; oth = B[k].oth;
+  document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x.dataset.t === k));
+  podium(); render();
+}
+podium();
 $('q').addEventListener('input', render);
 render();
 
 document.addEventListener('click', e => { const b = e.target.closest('[data-b]'); if (b) open(+b.dataset.b, true); });
 let cur = null;
 function open(d, push){
-  const r = ROWS.find(x => x.dorsal === d); if (!r) return; cur = r;
-  $('sK').textContent = r.estado === 'Finished' ? `${r.pos}º lugar · Masculino 2025` : (r.estado === 'DQ' ? 'Descalificado · Masculino 2025' : 'No tomó la salida · Masculino 2025');
+  const r = ALL.find(x => x.dorsal === d); if (!r) return; if (r.br !== br) setBranch(r.br); cur = r;
+  $('sK').textContent = r.estado === 'Finished' ? `${r.pos}º lugar · ${LABEL[r.br]} 2025` : (r.estado === 'DQ' ? `Descalificado · ${LABEL[r.br]} 2025` : `No tomó la salida · ${LABEL[r.br]} 2025`);
   $('sName').textContent = tc(r.nombre);
   const st = [['Dorsal','#'+r.dorsal]];
   if (r.estado === 'Finished') st.push(['Posición', r.pos+'º de '+fin.length],['Tiempo', fmt(r.tiempo), 'lime'],['Diferencia', r.gap ? gapF(r.gap) : 'Ganador']);
@@ -194,10 +204,7 @@ $('sShare').onclick = async () => {
   catch { const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
   $('toast').classList.add('on'); setTimeout(() => $('toast').classList.remove('on'), 1800);
 };
-document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
-  document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t));
-  $('pm').hidden = t.dataset.t !== 'm'; $('pf').hidden = t.dataset.t !== 'f'; $('pr').hidden = t.dataset.t !== 'r';
-});
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => setBranch(t.dataset.t));
 function fromHash(){ const m = location.hash.match(/^#dorsal-(\d+)$/); if (m) open(+m[1], false); }
 window.addEventListener('hashchange', fromHash); fromHash();
 </script>
