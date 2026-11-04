@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Resultados 2026 · Gracia Latidos</title>
+<meta name="description" content="Inscritos y resultados de la 2ª edición de Gracia Latidos (2026)." />
+<meta name="theme-color" content="#0F1110" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{--bg:#0F1110;--card:#1A1D1B;--card2:#222623;--muted:#8B918C;--lime:#C8F000;--accent:#FF6B2C;--text:#F4F6F4;--t:220ms cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+body{min-height:100vh}
+.wrap{max-width:560px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px 48px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top img{height:34px;width:auto}
+.home{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:999px;background:var(--card);transition:color var(--t)}
+.home:hover{color:var(--lime)}
+h1{font-family:"Plus Jakarta Sans",Inter,sans-serif;font-weight:800;font-size:40px;line-height:1.02;letter-spacing:-.02em;margin:28px 0 8px}
+h1 span{color:var(--lime)}
+.sub{color:var(--muted);margin:0 0 20px;font-size:15px;line-height:1.45}
+.badge{display:inline-block;background:rgba(255,107,44,.14);color:var(--accent);font-weight:700;font-size:12px;padding:5px 10px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+.tabs{display:flex;gap:6px;background:var(--card);padding:5px;border-radius:20px;margin:18px 0 14px}
+.tab{flex:1;border:0;background:transparent;color:var(--muted);font:700 14px Inter,sans-serif;padding:11px 4px;border-radius:15px;cursor:pointer;transition:background var(--t),color var(--t)}
+.tab[aria-selected=true]{background:var(--lime);color:#0F1110}
+.search{position:relative;margin-bottom:18px}
+.search input{width:100%;background:var(--card);border:1.5px solid transparent;color:var(--text);font:500 16px Inter,sans-serif;padding:14px 16px 14px 44px;border-radius:20px;outline:none;transition:border-color var(--t)}
+.search input:focus{border-color:var(--lime)}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:end;margin-top:30px;margin-bottom:22px}
+.pod{background:var(--card);border-radius:22px;padding:14px 10px;text-align:center;cursor:pointer;border:0;color:inherit;font:inherit;transition:transform var(--t)}
+.pod:active{transform:scale(.97)}
+.pod .medal{font-family:"Plus Jakarta Sans";font-weight:800;font-size:26px}
+.pod.p1{padding-top:22px;padding-bottom:20px;background:linear-gradient(180deg,rgba(200,240,0,.18),var(--card) 70%)}
+.pod.p1 .medal{color:var(--lime);font-size:34px}
+.pod.p2 .medal{color:#D9DDDA}.pod.p3 .medal{color:var(--accent)}
+.pod .nm{font-weight:700;font-size:13px;line-height:1.2;margin:6px 0 4px;min-height:32px}
+.pod .tm{font-family:"Plus Jakarta Sans";font-weight:800;font-size:15px}
+.pod .db{color:var(--muted);font-size:11px;margin-top:2px}
+h2{font-family:"Plus Jakarta Sans";font-weight:800;font-size:18px;margin:22px 0 10px}
+.list{background:var(--card);border-radius:24px;overflow:hidden}
+.hdr,.row{display:grid;grid-template-columns:34px 44px 1fr auto;gap:8px;align-items:center;padding:12px 14px}
+.hdr{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px}
+.row{border:0;width:100%;background:transparent;color:inherit;text-align:left;font:inherit;border-top:1px solid rgba(255,255,255,.05);cursor:pointer;transition:background var(--t)}
+.row:active,.row:hover{background:var(--card2)}
+.pos{font-family:"Plus Jakarta Sans";font-weight:800;font-size:16px}
+.bib{color:var(--muted);font-size:13px;font-weight:600}
+.name{font-weight:600;font-size:15px;line-height:1.25}
+.r{text-align:right}
+.time{font-family:"Plus Jakarta Sans";font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.gap{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.st{font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;letter-spacing:.04em}
+.st.DQ{background:rgba(255,107,44,.16);color:var(--accent)}
+.st.DNS{background:rgba(139,145,140,.18);color:var(--muted)}
+s.time{color:var(--muted);font-weight:700}
+.empty{background:var(--card);border-radius:24px;padding:40px 20px;text-align:center;color:var(--muted)}
+.empty b{display:block;font-family:"Plus Jakarta Sans";font-size:22px;color:var(--text);margin-bottom:6px}
+.note{color:var(--muted);font-size:12px;margin-top:10px;line-height:1.4}
+.none{padding:18px;color:var(--muted);text-align:center}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity var(--t);z-index:10}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;background:var(--card);border-radius:28px 28px 0 0;padding:10px 20px max(24px,env(safe-area-inset-bottom));transform:translateY(105%);visibility:hidden;transition:transform 240ms cubic-bezier(.2,.8,.2,1),visibility 0s 240ms;z-index:11}
+.sheet.on{transform:none;visibility:visible;transition:transform 240ms cubic-bezier(.2,.8,.2,1)}
+.grab{width:40px;height:5px;border-radius:9px;background:#3a3f3b;margin:0 auto 16px}
+.sheet .k{color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.sheet h3{font-family:"Plus Jakarta Sans";font-weight:800;font-size:28px;line-height:1.1;margin:6px 0 16px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.stat{background:var(--bg);border-radius:20px;padding:12px 14px}
+.stat .v{font-family:"Plus Jakarta Sans";font-weight:800;font-size:20px;margin-top:2px}
+.stat .v.lime{color:var(--lime)}
+.btns{display:flex;gap:8px}
+.btn{flex:1;border:0;border-radius:20px;padding:15px;font:800 15px Inter,sans-serif;cursor:pointer;transition:transform var(--t),opacity var(--t)}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:var(--lime);color:#0F1110}
+.btn.sec{background:var(--card2);color:var(--text)}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--lime);color:#0F1110;font-weight:700;font-size:14px;padding:10px 16px;border-radius:999px;opacity:0;transition:all var(--t);z-index:20;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+footer{color:var(--muted);font-size:12px;text-align:center;margin-top:32px}
+footer a{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.demo-banner{background:repeating-linear-gradient(45deg,#FF6B2C,#FF6B2C 12px,#e85a1d 12px,#e85a1d 24px);color:#0F1110;font-weight:800;font-size:13px;text-align:center;padding:10px 12px;border-radius:20px;margin:14px 0 0;letter-spacing:.02em}
+.demo-tag{display:inline-block;background:var(--accent);color:#0F1110;font-weight:800;font-size:11px;padding:3px 8px;border-radius:999px;margin-left:6px;vertical-align:middle;letter-spacing:.06em}
+.st.P{background:rgba(200,240,0,.12);color:var(--lime)}
+.hdr.nb,.row.nb{grid-template-columns:34px 1fr auto}
+.vs{background:var(--bg);border-radius:20px;padding:14px;margin-bottom:16px}
+.vs .k{margin-bottom:8px}
+.vs .g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vs .v{font-family:"Plus Jakarta Sans";font-weight:800;font-size:18px}
+.vs .d{margin-top:10px;font-weight:800;font-size:15px}
+.up{color:#34D27A}.down{color:#FF5A4E}.mut{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <img id="logo" alt="Gracia Latidos" />
+    <a class="home" id="home" href="../">← Inicio</a>
+  </div>
+  <div class="demo-banner" id="demoBanner" hidden>DEMO · Tiempos ficticios de prueba. No son resultados reales.</div>
+  <h1>Resultados <span>2026</span></h1>
+  <p class="sub"><span class="badge">2ª edición</span><br/><br/><span id="subTxt">Aún no hay tiempos: aquí están todos los inscritos. Los resultados aparecerán después de la carrera. Busca tu nombre.</span></p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-t="m" aria-selected="true">Masculino</button>
+    <button class="tab" role="tab" data-t="f" aria-selected="false">Femenino</button>
+    <button class="tab" role="tab" data-t="r" aria-selected="false">Relevos</button>
+  </div>
+
+  <section>
+    <label class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Busca por nombre" autocomplete="off" aria-label="Buscar por nombre" /></label>
+    <div class="podium" id="podium"></div>
+    <h2 id="finH">Clasificación</h2>
+    <div class="list" id="fin"></div>
+    <h2 id="othH">Inscritos</h2>
+    <div class="list" id="oth"></div>
+    <p class="note" id="note"></p>
+  </section>
+
+  <footer>Gracia Latidos · Edición 2026 · <a id="home2" href="../">Volver al inicio</a></footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sName">
+  <div class="grab"></div>
+  <div class="k" id="sK"></div>
+  <h3 id="sName"></h3>
+  <div class="stats" id="sStats"></div>
+  <div id="sVs"></div>
+  <div class="btns"><button class="btn sec" id="sClose">Cerrar</button><button class="btn pri" id="sShare">Compartir</button></div>
+</div>
+<div class="toast" id="toast">Enlace copiado</div>
+
+<script>
+// Inscritos 2026 (nombre_2026). Sin datos de pago. t25 solo si misma categoría y confianza alta.
+const ROWS = [{"n": "Roberto Acosta", "c": "m", "v": "invalid", "id": "roberto-acosta"}, {"n": "Felipe Araujo", "c": "r", "id": "felipe-araujo"}, {"n": "Ariana Arcos", "c": "r", "id": "ariana-arcos"}, {"n": "Tito Arcos", "c": "r", "id": "tito-arcos"}, {"n": "Verónica Armendáriz", "c": "r", "id": "veronica-armendariz"}, {"n": "Cristian Becerra", "c": "m", "v": "cmp", "t25": "01:20:46", "id": "cristian-becerra"}, {"n": "Maripaz Becerra", "c": "f", "v": "cmp", "t25": "01:33:51", "id": "maripaz-becerra"}, {"n": "Abner Bravo", "c": "r", "id": "abner-bravo"}, {"n": "Matías Bravo", "c": "r", "id": "matias-bravo"}, {"n": "Elías Cabrera", "c": "r", "id": "elias-cabrera"}, {"n": "Fernando Cabrera", "c": "r", "id": "fernando-cabrera"}, {"n": "Luis Cacuango", "c": "m", "v": "cmp", "t25": "01:07:37", "id": "luis-cacuango"}, {"n": "Paulette Cacuango", "c": "r", "id": "paulette-cacuango"}, {"n": "Joseph Camacho", "c": "m", "id": "joseph-camacho"}, {"n": "Vielka Carrera", "c": "r", "id": "vielka-carrera"}, {"n": "Paulina Cevallos", "c": "r", "id": "paulina-cevallos"}, {"n": "Emilia Chilla", "c": "r", "id": "emilia-chilla"}, {"n": "Melissa Dávila", "c": "f", "id": "melissa-davila"}, {"n": "Diego Delgado", "c": "m", "id": "diego-delgado"}, {"n": "Samuel Delgado", "c": "r", "id": "samuel-delgado"}, {"n": "Carlos Escalante", "c": "r", "id": "carlos-escalante"}, {"n": "Charlie Escalante", "c": "r", "id": "charlie-escalante"}, {"n": "Hady Escalante", "c": "r", "id": "hady-escalante"}, {"n": "Juanita Espín", "c": "f", "v": "cmp", "t25": "01:51:12", "id": "juanita-espin"}, {"n": "Laura Johanna Farina", "c": "f", "id": "laura-johanna-farina"}, {"n": "Paola Flores", "c": "r", "id": "paola-flores"}, {"n": "Yolanda Flores", "c": "r", "id": "yolanda-flores"}, {"n": "Josué Freire", "c": "r", "id": "josue-freire"}, {"n": "Javier García", "c": "m", "v": "cmp", "t25": "01:15:44", "id": "javier-garcia"}, {"n": "Kike García", "c": "m", "id": "kike-garcia"}, {"n": "Gina Valencia", "c": "f", "id": "gina-valencia"}, {"n": "Carolina Henríquez", "c": "r", "id": "carolina-henriquez"}, {"n": "Carlos Jara Correa", "c": "r", "id": "carlos-jara-correa"}, {"n": "Patricia León", "c": "r", "id": "patricia-leon"}, {"n": "Tomás León", "c": "r", "id": "tomas-leon"}, {"n": "Diogo Moreira", "c": "r", "id": "diogo-moreira"}, {"n": "Gabriela Ojeda", "c": "r", "id": "gabriela-ojeda"}, {"n": "Lissette Palomeque", "c": "r", "id": "lissette-palomeque"}, {"n": "Doménica Panta", "c": "r", "id": "domenica-panta"}, {"n": "Gabriela Pérez", "c": "f", "id": "gabriela-perez"}, {"n": "Juliana Pinargote", "c": "r", "id": "juliana-pinargote"}, {"n": "Anderson Pinta", "c": "m", "id": "anderson-pinta"}, {"n": "Andrés Pizarro", "c": "r", "id": "andres-pizarro"}, {"n": "Felipe Quinteros", "c": "r", "id": "felipe-quinteros"}, {"n": "Paula Rueda", "c": "f", "id": "paula-rueda"}, {"n": "Robinson Rumiguano", "c": "m", "id": "robinson-rumiguano"}, {"n": "Juan Carlos Sáenz", "c": "r", "id": "juan-carlos-saenz"}, {"n": "Darwin Salazar", "c": "m", "v": "cmp", "t25": "01:26:37", "id": "darwin-salazar"}, {"n": "Gianna Salazar", "c": "r", "id": "gianna-salazar"}, {"n": "Esteban Salvador", "c": "r", "id": "esteban-salvador"}, {"n": "Fernando Salvador", "c": "r", "id": "fernando-salvador"}, {"n": "Paola Sánchez", "c": "r", "id": "paola-sanchez"}, {"n": "Juan Carlos Villacreces", "c": "m", "v": "cmp", "t25": "01:31:14", "id": "juan-carlos-villacreces"}, {"n": "Jahaira Acosta", "c": "r", "id": "jahaira-acosta"}, {"n": "Norbelis Camargo", "c": "r", "id": "norbelis-camargo"}, {"n": "Carol Cermeño", "c": "f", "v": "cmp", "t25": "01:24:24", "id": "carol-cermeno"}, {"n": "Pablo Torres", "c": "m", "id": "pablo-torres"}, {"n": "Mare Jara", "c": "f", "id": "mare-jara"}, {"n": "José Cano", "c": "m", "v": "cmp", "t25": "01:08:24", "id": "jose-cano"}, {"n": "Julián Hidalgo Chiriboga", "c": "m", "id": "julian-hidalgo-chiriboga"}, {"n": "Fabiana Jara", "c": "r", "id": "fabiana-jara"}, {"n": "Amelia Jara", "c": "r", "id": "amelia-jara"}, {"n": "Esteban Moya", "c": "m", "id": "esteban-moya"}, {"n": "Paula Villacreces", "c": "r", "id": "paula-villacreces"}, {"n": "Fernando Cisneros", "c": "m", "v": "invalid", "id": "fernando-cisneros"}, {"n": "Benjhamín Cisneros", "c": "m", "id": "benjhamin-cisneros"}, {"n": "Silvania Suárez", "c": "f", "v": "cmp", "t25": "01:38:02", "id": "silvania-suarez"}, {"n": "Guissela Vega", "c": "f", "v": "invalid", "id": "guissela-vega"}, {"n": "Germania Tatés", "c": "f", "id": "germania-tates"}, {"n": "Dayana Erazo", "c": "r", "id": "dayana-erazo"}, {"n": "Jorge Vásquez", "c": "r", "id": "jorge-vasquez"}, {"n": "Mary De Luna", "c": "r", "id": "mary-de-luna"}, {"n": "Ramiro Sáenz", "c": "r", "id": "ramiro-saenz"}, {"n": "José Andrés Sáenz", "c": "r", "id": "jose-andres-saenz"}, {"n": "Emma Sáenz", "c": "r", "id": "emma-saenz"}, {"n": "Jonnathan Hames Mora Jaimes", "c": "m", "id": "jonnathan-hames-mora-jaimes"}, {"n": "Pablo López", "c": "m", "v": "cmp", "t25": "01:25:47", "id": "pablo-lopez"}, {"n": "Jheferson Carrasco", "c": "m", "id": "jheferson-carrasco"}, {"n": "Ivan Villegas", "c": "m", "id": "ivan-villegas"}, {"n": "Jessica Arguello", "c": "f", "id": "jessica-arguello"}];
+const LABEL = {m:'Masculino', f:'Femenino', r:'Relevos'};
+const DEMO = new URLSearchParams(location.search).get('demo') === '1';
+
+const dir = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+const root = new URL('../', location.origin + dir).href;
+document.getElementById('logo').src = root + 'assets/logo-gracia-latidos-white.png';
+document.getElementById('home').href = root; document.getElementById('home2').href = root;
+
+const $ = s => document.getElementById(s);
+const sec = t => t.split(':').reduce((a,v) => a*60 + +v, 0);
+const p2 = n => String(n).padStart(2,'0');
+const hms = s => { const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return h ? h+':'+p2(m)+':'+p2(x) : m+':'+p2(x); };
+const fmt = t => hms(sec(t));
+const gapF = s => { const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60; return '+' + (h ? h+':'+p2(m)+':'+p2(x) : p2(m)+':'+p2(x)); };
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+
+// ---- DEMO: tiempos ficticios, solo con ?demo=1 ----
+if (DEMO) {
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  ROWS.forEach(r => {
+    if (r.c === 'r') return;                       // relevos: sin equipos aún, siguen pendientes
+    let s;
+    if (r.v === 'cmp') s = sec(r.t25) + Math.round((rnd() - 0.6) * 600);   // ±, mayoría mejora
+    else s = (r.c === 'm' ? 3900 : 4800) + Math.round(rnd() * 2700);
+    r.t26 = p2(Math.floor(s/3600)) + ':' + p2(Math.floor(s%3600/60)) + ':' + p2(s%60);
+  });
+  $('demoBanner').hidden = false;
+  $('subTxt').textContent = 'Vista DEMO con tiempos inventados para probar la página. Sin ?demo=1 solo se ven los inscritos reales.';
+  document.title = 'DEMO · ' + document.title;
+}
+
+const B = {};
+for (const k of ['m','f','r']) {
+  const rows = ROWS.filter(r => r.c === k);
+  const fin = rows.filter(r => r.t26).sort((a,b) => sec(a.t26) - sec(b.t26));
+  fin.forEach((r,i) => { r.pos = i + 1; r.gap = sec(r.t26) - sec(fin[0].t26); });
+  const oth = rows.filter(r => !r.t26).sort((a,b) => a.n.localeCompare(b.n, 'es'));
+  B[k] = {fin, oth, total: rows.length};
+}
+let br = 'm', cur = null;
+
+function rowHTML(r){
+  if (r.t26)
+    return `<button class="row nb" data-i="${r.id}"><span class="pos">${r.pos}</span><span class="name">${esc(r.n)}</span><span class="r"><div class="time">${fmt(r.t26)}</div><div class="gap">${r.gap ? gapF(r.gap) : 'Ganador'}</div></span></button>`;
+  return `<button class="row nb" data-i="${r.id}"><span class="pos">–</span><span class="name">${esc(r.n)}</span><span class="r"><span class="st P">Pendiente</span></span></button>`;
+}
+function render(){
+  const {fin, oth, total} = B[br];
+  const q = norm($('q').value.trim());
+  const m = r => !q || norm(r.n).includes(q);
+  const f = fin.filter(m), o = oth.filter(m);
+  $('podium').style.display = (q || fin.length < 3) ? 'none' : '';
+  $('podium').innerHTML = fin.length >= 3 ? [1,0,2].map(i => { const r = fin[i];
+    return `<button class="pod p${r.pos}" data-i="${r.id}"><div class="medal">${r.pos}º</div><div class="nm">${esc(r.n)}</div><div class="tm">${fmt(r.t26)}</div><div class="db">${DEMO ? 'DEMO' : ''}</div></button>`; }).join('') : '';
+  const showFin = fin.length > 0;
+  $('finH').style.display = $('fin').style.display = showFin ? '' : 'none';
+  $('fin').innerHTML = '<div class="hdr nb"><span>Pos</span><span>Nombre</span><span class="r">Tiempo</span></div>' + (f.map(rowHTML).join('') || '<div class="none">Sin coincidencias</div>');
+  $('othH').textContent = showFin ? 'Pendientes' : `Inscritos (${total})`;
+  $('othH').style.display = $('oth').style.display = (o.length || !showFin) ? '' : 'none';
+  $('oth').innerHTML = (o.length ? '<div class="hdr nb"><span></span><span>Nombre</span><span class="r">Estado</span></div>' : '') + (o.map(rowHTML).join('') || '<div class="none">Sin coincidencias</div>');
+  $('note').textContent = br === 'r'
+    ? 'Relevos: lista de inscritos individuales. Los equipos y tiempos se publicarán después de la carrera.'
+    : (DEMO ? 'DEMO: posiciones y tiempos ficticios.' : 'Los dorsales y tiempos se publicarán después de la carrera.');
+}
+function setBranch(k){
+  br = k; document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x.dataset.t === k)); render();
+}
+$('q').addEventListener('input', render);
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => setBranch(t.dataset.t));
+render();
+
+function vsHTML(r){
+  if (r.v === 'invalid') return `<div class="vs"><div class="k">vs. 2025</div><div class="mut">Sin tiempo válido en 2025</div></div>`;
+  if (r.v !== 'cmp') return '';
+  let d = '<div class="d mut">2026 pendiente</div>';
+  if (r.t26) { const x = sec(r.t26) - sec(r.t25);
+    d = x < 0 ? `<div class="d up">Mejoró ${hms(-x)}</div>` : x > 0 ? `<div class="d down">${hms(x)} más lento</div>` : '<div class="d mut">Mismo tiempo</div>'; }
+  return `<div class="vs"><div class="k">vs. 2025${DEMO ? '<span class="demo-tag">DEMO</span>' : ''}</div><div class="g">
+    <div><div class="k">2025</div><div class="v">${fmt(r.t25)}</div></div>
+    <div><div class="k">2026</div><div class="v">${r.t26 ? fmt(r.t26) : 'Pendiente'}</div></div></div>${d}</div>`;
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) open(b.dataset.i, true); });
+function open(id, push){
+  const r = ROWS.find(x => x.id === id); if (!r) return; if (r.c !== br) setBranch(r.c); cur = r;
+  $('sK').innerHTML = esc((r.t26 ? r.pos + 'º lugar · ' : 'Inscrito · ') + LABEL[r.c] + ' 2026') + (DEMO ? '<span class="demo-tag">DEMO</span>' : '');
+  $('sName').textContent = r.n;
+  const st = [['Categoría', LABEL[r.c]]];
+  if (r.t26) st.push(['Posición', r.pos + 'º de ' + B[r.c].fin.length], ['Tiempo', fmt(r.t26), 'lime'], ['Diferencia', r.gap ? gapF(r.gap) : 'Ganador']);
+  else st.push(['Estado', 'Pendiente']);
+  $('sStats').innerHTML = st.map(([k,v,c]) => `<div class="stat"><div class="k">${k}</div><div class="v ${c||''}">${v}</div></div>`).join('');
+  $('sVs').innerHTML = vsHTML(r);
+  $('scrim').classList.add('on'); $('sheet').classList.add('on');
+  if (push) history.replaceState(null, '', location.search + '#atleta-' + id);
+}
+function close(){ $('scrim').classList.remove('on'); $('sheet').classList.remove('on'); cur = null;
+  history.replaceState(null, '', location.pathname + location.search); }
+$('scrim').onclick = close; $('sClose').onclick = close;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+$('sShare').onclick = async () => {
+  if (!cur) return;
+  const url = location.origin + location.pathname + (DEMO ? '?demo=1' : '') + '#atleta-' + cur.id;
+  const text = `${cur.n} · Gracia Latidos 2026` + (DEMO ? ' (DEMO)' : '');
+  if (navigator.share) { try { await navigator.share({title:'Gracia Latidos 2026', text, url}); return; } catch(e){ if (e.name === 'AbortError') return; } }
+  try { await navigator.clipboard.writeText(url); }
+  catch { const t = document.createElement('textarea'); t.value = url; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
+  $('toast').classList.add('on'); setTimeout(() => $('toast').classList.remove('on'), 1800);
+};
+function fromHash(){ const m = location.hash.match(/^#atleta-([a-z0-9-]+)$/); if (m) open(m[1], false); }
+window.addEventListener('hashchange', fromHash); fromHash();
+</script>
+</body>
+</html>

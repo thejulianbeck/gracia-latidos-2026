@@ -7,7 +7,8 @@
       "**/node_modules/**",
       "deploy-firebase.sh",
       "invitacion-2026/**",
-      "resultados-2025/**"
+      "resultados-2025/**",
+      "resultados-2026/**"
     ],
     "rewrites": [
       {
@@ -25,6 +26,14 @@
       {
         "source": "/resultados-2025/",
         "destination": "/_firebase/resultados-2025.html"
+      },
+      {
+        "source": "/resultados-2026",
+        "destination": "/_firebase/resultados-2026.html"
+      },
+      {
+        "source": "/resultados-2026/",
+        "destination": "/_firebase/resultados-2026.html"
       }
     ]
   }
