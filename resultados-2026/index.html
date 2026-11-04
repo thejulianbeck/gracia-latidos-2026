@@ -186,7 +186,6 @@ TEAMS.sort((a,b) => a.n - b.n).forEach(T => {
   T.missing = LEGS.filter(([k]) => !T.legs[k]).map(([,,l]) => l);
   T.ok = !T.missing.length;
 });
-const MISS = {'Natación':'nadador','Ciclismo':'ciclista','Carrera':'corredor'};
 
 // Regla vs. 2025: confianza alta + misma categoría + final válido con tiempo real. Si no, igual que corredor nuevo.
 const CAT = {m:'masculino', f:'femenino', r:'relevo'};
@@ -252,11 +251,11 @@ function render(){
 function teamHTML(T){
   const legs = LEGS.map(([k,ic,l]) => {
     const who = T.legs[k];
-    return `<div class="leg"><span class="pill${who ? '' : ' miss'}">${ic} ${l}</span><span class="who">${who ? who.map(esc).join(' y ') : '<span class="mut">Por asignar</span>'}</span><span class="lt">${who && T.lt ? hms(T.lt[k]) : ''}</span></div>`;
+    return `<div class="leg"><span class="pill${who ? '' : ' miss'}">${ic} ${l}</span><span class="who">${who ? who.map(esc).join(' y ') : '<span class="mut">Por confirmar</span>'}</span><span class="lt">${who && T.lt ? hms(T.lt[k]) : ''}</span></div>`;
   }).join('');
   const right = T.pos ? `<div class="time">${hms(T.tot)}</div><div class="gap">${T.gap ? gapF(T.gap) : 'Ganador'}</div>`
-    : T.ok ? '<span class="st P">Pendiente</span>' : '<span class="st DNS">Incompleto</span>';
-  const inc = T.ok ? '' : `<div class="inc">Falta ${T.missing.map(l => MISS[l]).join(' y ')}</div>`;
+    : T.ok ? '<span class="st P">Pendiente</span>' : '<span class="st DNS">Por confirmar</span>';
+  const inc = '';
   return `<div class="team" id="equipo-${T.n}"><div class="th"><span class="tn"><span class="tp${T.pos ? '' : ' o'}">${T.pos || '–'}</span>Equipo ${T.n}${DEMO && T.pos ? '<span class="demo-tag">DEMO</span>' : ''}</span><span class="tt">${right}</span></div>${legs}${inc}</div>`;
 }
 function renderTeams(){
@@ -268,7 +267,7 @@ function renderTeams(){
   $('nteH').hidden = $('nte').hidden = !nt.length;
   $('nte').innerHTML = nt.map(n => `<div class="row nb"><span class="pos">–</span><span class="name">${esc(n)}</span><span class="r"><span class="st P">Sin equipo</span></span></div>`).join('');
   $('othH').textContent = `Equipos (${TEAMS.length})`;
-  $('note').textContent = DEMO ? 'DEMO: tiempos por tramo ficticios. Los equipos incompletos no entran en la clasificación.' : 'Los tiempos de cada tramo se publicarán después de la carrera.';
+  $('note').textContent = DEMO ? 'DEMO: tiempos por tramo ficticios. Los equipos con tramos por confirmar no entran en la clasificación.' : 'Los tiempos de cada tramo se publicarán después de la carrera.';
 }
 function setBranch(k){
   br = k; document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x.dataset.t === k)); render();
