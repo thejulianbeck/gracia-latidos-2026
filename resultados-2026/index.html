@@ -222,7 +222,7 @@ function vsHTML(r){
     d = x < 0 ? `<div class="d up">${hms(-x)} más rápido</div>` : x > 0 ? `<div class="d down">${hms(x)} más lento</div>` : '<div class="d mut">Mismo tiempo</div>'; }
   return `<div class="vs"><div class="k">vs. 2025${DEMO ? '<span class="demo-tag">DEMO</span>' : ''}</div><div class="g">
     <div><div class="k">2025</div><div class="v">${fmt(r.t25)}</div></div>
-    <div><div class="k">2026</div><div class="v">${r.t26 ? fmt(r.t26) : 'Pendiente'}</div></div></div>${d}</div>`;
+    <div><div class="k">2026</div><div class="v">${r.t26 ? fmt(r.t26) : 'Pendiente'}</div>${d}</div></div></div>`;
 }
 document.addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) open(b.dataset.i, true); });
 function open(id, push){
